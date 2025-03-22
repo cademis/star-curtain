@@ -1,10 +1,12 @@
 {
   "devDependencies": {
+    "concurrently": "^9.1.2",
     "typescript": "^5"
   },
   "scripts": {
-    "dev": "turbo dev",
-    "build": "turbo build"
+    "dev": "concurrently \"pnpm dev:client\" \"pnpm dev:server\"",
+    "dev:client": "pnpm --filter ./apps/client dev",
+    "dev:server": "pnpm --filter ./apps/server dev"
   },
   "packageManager": "pnpm@8.15.4"
 }
