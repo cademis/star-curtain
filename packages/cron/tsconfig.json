@@ -1,0 +1,17 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "build",
+    "rootDir": "src",
+    "esModuleInterop": true,
+    "declaration": true,
+    "declarationDir": "build/types",
+    "emitDeclarationOnly": false,
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "allowJs": true,
+    "resolveJsonModule": true
+  },
+  "include": ["src/**/*"],
+  "exclude": ["build/**/*", "node_modules"]
+}

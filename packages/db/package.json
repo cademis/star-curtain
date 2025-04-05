@@ -1,0 +1,39 @@
+{
+  "name": "@repo/db",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "main": "src/index.ts",
+  "exports": {
+    ".": {
+      "default": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./schema/*": {
+      "default": "./dist/schema/*.js",
+      "types": "./dist/schema/*.d.ts"
+    }
+  },
+  "description": "",
+  "scripts": {
+    "dev": "tsc --build --watch",
+    "build": "rm -rf dist && tsc",
+    "lint": "eslint --debug",
+    "openapi-gen": "tsx ./scripts/swagger-codegen.js",
+    "sync-data": "tsx scripts/sync-data.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@prisma/client": "^6.5.0",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "eslint": "^9.21.0",
+    "prisma": "^6.5.0",
+    "typescript": "^5",
+    "swagger-typescript-api": "^13.0.24",
+    "tsx": "^4.19.1"
+  }
+}

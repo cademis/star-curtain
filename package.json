@@ -3,10 +3,20 @@
     "concurrently": "^9.1.2",
     "typescript": "^5"
   },
+  "type": "module",
   "scripts": {
-    "dev": "concurrently \"pnpm dev:client\" \"pnpm dev:server\"",
+    "dev:apps": "concurrently \"pnpm dev:client\" \"pnpm dev:server\"",
     "dev:client": "pnpm --filter ./apps/client dev",
-    "dev:server": "pnpm --filter ./apps/server dev"
+    "dev:server": "pnpm --filter ./apps/server dev",
+    "dev:packages": "concurrently \"pnpm dev:db\" \"pnpm dev:trpc-server\"",
+    "dev:db": "pnpm --filter ./packages/db dev",
+    "dev:trpc-server": "pnpm --filter ./packages/trpc-server dev",
+    "build": "pnpm build:packages && pnpm build:apps",
+    "build:packages": "pnpm -r --filter='./packages/*' run build",
+    "build:apps": "pnpm -r --filter='./apps/*' run build"
   },
-  "packageManager": "pnpm@8.15.4"
+  "packageManager": "pnpm@8.15.4",
+  "dependencies": {
+    "dotenv": "^16.4.5"
+  }
 }

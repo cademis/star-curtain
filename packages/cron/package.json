@@ -1,0 +1,22 @@
+{
+  "name": "cron",
+  "version": "0.0.0",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "rm -rf build && tsc"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@repo/db": "workspace:*",
+    "dotenv": "^16.4.5"
+  },
+  "devDependencies": {
+    "swagger-typescript-api": "^13.0.24",
+    "tsx": "^4.19.1",
+    "typescript": "^5.8.2"
+  }
+}

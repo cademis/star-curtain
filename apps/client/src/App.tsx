@@ -4,7 +4,16 @@ import { useState } from "react";
 import { TRPCProvider } from "./utils/trpc";
 import { AppRouter } from "@repo/trpc-server";
 import superjson from "superjson";
-import { Homepage } from "./Homepage/Homepage";
+import Dashboard from "./components/Dashboard";
+import { createBrowserRouter, RouterProvider } from "react-router";
+import { createTheme, ThemeProvider } from "@mui/material";
+
+const router = createBrowserRouter([
+  {
+    Component: Dashboard,
+    path: "/",
+  },
+]);
 
 function makeQueryClient() {
   return new QueryClient({
@@ -34,6 +43,22 @@ function getQueryClient() {
   }
 }
 
+const theme = createTheme({
+  cssVariables: {
+    colorSchemeSelector: "data-toolpad-color-scheme",
+  },
+  colorSchemes: { light: true, dark: true },
+  breakpoints: {
+    values: {
+      xs: 0,
+      sm: 600,
+      md: 600,
+      lg: 1200,
+      xl: 1536,
+    },
+  },
+});
+
 function App() {
   const queryClient = getQueryClient();
   const [trpcClient] = useState(() =>
@@ -49,7 +74,9 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TRPCProvider trpcClient={trpcClient} queryClient={queryClient}>
-        <Homepage />
+        <ThemeProvider theme={theme}>
+          <RouterProvider router={router} />
+        </ThemeProvider>
       </TRPCProvider>
     </QueryClientProvider>
   );

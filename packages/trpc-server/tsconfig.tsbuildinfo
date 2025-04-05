@@ -1,0 +1,1 @@
+{"root":["./src/index.ts","./src/trpc.ts","./src/routers/activity.router.ts","./src/routers/apparatus.router.ts","./src/routers/root.ts","./src/routers/user.router.ts"],"version":"5.8.2"}
