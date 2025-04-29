@@ -1,29 +1,28 @@
-import { db } from "@repo/db";
 import { CreateExpressContextOptions } from "@trpc/server/adapters/express";
 export declare const createTRPCContext: ({}: CreateExpressContextOptions) => {
-    db: typeof db;
+    db: import("@prisma/client").PrismaClient<import("@prisma/client").Prisma.PrismaClientOptions, never, import("@prisma/client/runtime/library").DefaultArgs>;
 };
-export type TRPCContext = Awaited<ReturnType<typeof createTRPCContext>>;
+export type TRPCContext = ReturnType<typeof createTRPCContext>;
 export declare const t: {
     _config: import("@trpc/server/unstable-core-do-not-import").RootConfig<{
         ctx: {
-            db: typeof db;
+            db: import("@prisma/client").PrismaClient<import("@prisma/client").Prisma.PrismaClientOptions, never, import("@prisma/client/runtime/library").DefaultArgs>;
         };
         meta: object;
         errorShape: import("@trpc/server/unstable-core-do-not-import").DefaultErrorShape;
         transformer: true;
     }>;
     procedure: import("@trpc/server/unstable-core-do-not-import").ProcedureBuilder<{
-        db: typeof db;
+        db: import("@prisma/client").PrismaClient<import("@prisma/client").Prisma.PrismaClientOptions, never, import("@prisma/client/runtime/library").DefaultArgs>;
     }, object, object, typeof import("@trpc/server/unstable-core-do-not-import").unsetMarker, typeof import("@trpc/server/unstable-core-do-not-import").unsetMarker, typeof import("@trpc/server/unstable-core-do-not-import").unsetMarker, typeof import("@trpc/server/unstable-core-do-not-import").unsetMarker, false>;
     middleware: <$ContextOverrides>(fn: import("@trpc/server/unstable-core-do-not-import").MiddlewareFunction<{
-        db: typeof db;
+        db: import("@prisma/client").PrismaClient<import("@prisma/client").Prisma.PrismaClientOptions, never, import("@prisma/client/runtime/library").DefaultArgs>;
     }, object, object, $ContextOverrides, unknown>) => import("@trpc/server/unstable-core-do-not-import").MiddlewareBuilder<{
-        db: typeof db;
+        db: import("@prisma/client").PrismaClient<import("@prisma/client").Prisma.PrismaClientOptions, never, import("@prisma/client/runtime/library").DefaultArgs>;
     }, object, $ContextOverrides, unknown>;
     router: <TInput extends import("@trpc/server/unstable-core-do-not-import").CreateRouterOptions>(input: TInput) => import("@trpc/server/unstable-core-do-not-import").BuiltRouter<{
         ctx: {
-            db: typeof db;
+            db: import("@prisma/client").PrismaClient<import("@prisma/client").Prisma.PrismaClientOptions, never, import("@prisma/client/runtime/library").DefaultArgs>;
         };
         meta: object;
         errorShape: import("@trpc/server/unstable-core-do-not-import").DefaultErrorShape;
@@ -32,14 +31,14 @@ export declare const t: {
     mergeRouters: typeof import("@trpc/server/unstable-core-do-not-import").mergeRouters;
     createCallerFactory: <TRecord extends import("@trpc/server").RouterRecord>(router: Pick<import("@trpc/server/unstable-core-do-not-import").Router<{
         ctx: {
-            db: typeof db;
+            db: import("@prisma/client").PrismaClient<import("@prisma/client").Prisma.PrismaClientOptions, never, import("@prisma/client/runtime/library").DefaultArgs>;
         };
         meta: object;
         errorShape: import("@trpc/server/unstable-core-do-not-import").DefaultErrorShape;
         transformer: true;
     }, TRecord>, "_def">) => import("@trpc/server/unstable-core-do-not-import").RouterCaller<{
         ctx: {
-            db: typeof db;
+            db: import("@prisma/client").PrismaClient<import("@prisma/client").Prisma.PrismaClientOptions, never, import("@prisma/client/runtime/library").DefaultArgs>;
         };
         meta: object;
         errorShape: import("@trpc/server/unstable-core-do-not-import").DefaultErrorShape;
@@ -48,12 +47,12 @@ export declare const t: {
 };
 export declare const router: <TInput extends import("@trpc/server/unstable-core-do-not-import").CreateRouterOptions>(input: TInput) => import("@trpc/server/unstable-core-do-not-import").BuiltRouter<{
     ctx: {
-        db: typeof db;
+        db: import("@prisma/client").PrismaClient<import("@prisma/client").Prisma.PrismaClientOptions, never, import("@prisma/client/runtime/library").DefaultArgs>;
     };
     meta: object;
     errorShape: import("@trpc/server/unstable-core-do-not-import").DefaultErrorShape;
     transformer: true;
 }, import("@trpc/server/unstable-core-do-not-import").DecorateCreateRouterOptions<TInput>>;
 export declare const publicProcedure: import("@trpc/server/unstable-core-do-not-import").ProcedureBuilder<{
-    db: typeof db;
+    db: import("@prisma/client").PrismaClient<import("@prisma/client").Prisma.PrismaClientOptions, never, import("@prisma/client/runtime/library").DefaultArgs>;
 }, object, object, typeof import("@trpc/server/unstable-core-do-not-import").unsetMarker, typeof import("@trpc/server/unstable-core-do-not-import").unsetMarker, typeof import("@trpc/server/unstable-core-do-not-import").unsetMarker, typeof import("@trpc/server/unstable-core-do-not-import").unsetMarker, false>;

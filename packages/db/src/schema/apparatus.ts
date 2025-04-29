@@ -28,11 +28,12 @@ export const MovementTypeEnum = z.enum(
 const baseApparatus = {
   name: z.string(),
   unit: z.string(),
-  isUnilateral: z.boolean().default(false),
-  baseRm: z.number().default(1),
-  increment: z.number().default(1),
+  isUnilateral: z.boolean(),
+  reps: z.coerce.number(),
+  increment: z.coerce.number(),
   movementType: z.string(),
   bodyPart: z.string(),
+  oneRepMax: z.coerce.number().optional(),
 };
 
 export const createApparatusSchema = z.object({
@@ -46,5 +47,10 @@ export const selectApparatusSchema = z.object({
 
 export const updateApparatusSchema = z.object({
   id: z.number(),
+  ...baseApparatus,
+});
+
+export const upsertApparatusDtoSchema = z.object({
+  id: z.number().optional(),
   ...baseApparatus,
 });

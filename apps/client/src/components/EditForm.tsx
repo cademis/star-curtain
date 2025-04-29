@@ -1,0 +1,207 @@
+import {
+  FormLabel,
+  ToggleButton,
+  ToggleButtonGroup,
+  FormControl,
+  FormControlLabel,
+  TextField,
+  MenuItem,
+  Select,
+  Input,
+  Box,
+  SxProps,
+  Theme,
+} from "@mui/material";
+import { Controller, useForm } from "react-hook-form";
+import { Unit } from "../constants";
+import { z } from "zod";
+import {
+  bodyParts,
+  movementTypes,
+  upsertApparatusDtoSchema,
+} from "@repo/db/schema/apparatus";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect } from "react";
+import {
+  calculateEstimatedOneRepMax,
+  calculateEstimatedWeight,
+} from "../utils";
+
+const style: SxProps<Theme> = (theme) => ({
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+  display: "flex",
+  flexDirection: "column",
+  gap: theme.spacing(1),
+});
+
+type Props = {
+  initialValues: z.infer<typeof upsertApparatusDtoSchema>;
+  onSubmit: (data: z.infer<typeof upsertApparatusDtoSchema>) => void;
+  id?: number;
+};
+
+export function EditForm({ initialValues, onSubmit, id }: Props) {
+  const isUpdateMode = !!id;
+
+  const calculateInitialValues = () => {
+    const { oneRepMax, reps } = initialValues;
+    if (!oneRepMax) throw Error("oneRepMax is undefined");
+    const weight = calculateEstimatedWeight(reps, oneRepMax);
+    return { ...initialValues, weight };
+  };
+
+  const {
+    register,
+    handleSubmit,
+    control,
+    watch,
+    setValue,
+    formState: { errors, isSubmitting },
+  } = useForm<z.infer<typeof upsertApparatusDtoSchema> & { weight?: number }>({
+    resolver: zodResolver(upsertApparatusDtoSchema),
+    defaultValues: calculateInitialValues(),
+  });
+
+  const weight = watch("weight");
+  const reps = watch("reps");
+
+  // Update oneRepMax when weight or reps changes
+  useEffect(() => {
+    if (weight && reps) {
+      setValue(
+        "oneRepMax",
+        calculateEstimatedOneRepMax(Number(weight), Number(reps))
+      );
+    } else {
+      setValue("oneRepMax", 1);
+    }
+  }, [weight, reps, setValue]);
+
+  return (
+    <Box sx={style} component={"form"} onSubmit={handleSubmit(onSubmit)}>
+      <TextField label="Name" {...register("name")} />
+
+      <FormControlLabel
+        label="Unit"
+        control={
+          <Controller
+            name="unit"
+            control={control}
+            render={({ field: { onChange, value } }) => (
+              <ToggleButtonGroup
+                color="primary"
+                value={value}
+                exclusive
+                onChange={onChange}
+              >
+                {Object.values(Unit).map((value) => (
+                  <ToggleButton key={value} value={value}>
+                    {value.toLocaleUpperCase()}
+                  </ToggleButton>
+                ))}
+              </ToggleButtonGroup>
+            )}
+          />
+        }
+      />
+
+      <Controller
+        control={control}
+        name="weight"
+        render={({ field }) => <TextField label="Weight" {...field} />}
+      />
+
+      <Controller
+        control={control}
+        name="reps"
+        render={({ field }) => (
+          <TextField label="Reps" type="number" {...field} />
+        )}
+      />
+
+      <Controller
+        control={control}
+        name="oneRepMax"
+        render={({ field }) => (
+          <TextField label="One Rep Max" {...field} disabled />
+        )}
+      />
+
+      <FormControlLabel
+        label="Is Unilateral"
+        control={
+          <Controller
+            name="isUnilateral"
+            control={control}
+            render={({ field: { onChange, value } }) => (
+              <ToggleButtonGroup
+                value={value}
+                exclusive
+                onChange={(_event, newValue) => {
+                  if (newValue !== null) {
+                    onChange(newValue);
+                  }
+                }}
+              >
+                <ToggleButton value={false}>No</ToggleButton>
+                <ToggleButton value={true}>Yes</ToggleButton>
+              </ToggleButtonGroup>
+            )}
+          />
+        }
+      />
+
+      <FormControl variant="standard" error={!!errors.bodyPart}>
+        <FormLabel>Body Part</FormLabel>
+        <Controller
+          name="bodyPart"
+          control={control}
+          render={({ field }) => (
+            <Select label="Body Part" {...field}>
+              {Object.values(bodyParts).map((item) => {
+                return (
+                  <MenuItem key={item.field} value={item.field}>
+                    {item.title}
+                  </MenuItem>
+                );
+              })}
+            </Select>
+          )}
+        />
+      </FormControl>
+
+      <Controller
+        control={control}
+        name="movementType"
+        render={({ field }) => (
+          <FormControl variant="standard">
+            <FormLabel>Movement Type</FormLabel>
+            <Select label="Unit" {...field}>
+              {Object.values(movementTypes).map((value) => {
+                return (
+                  <MenuItem key={value.field} value={value.field}>
+                    {value.title}
+                  </MenuItem>
+                );
+              })}
+            </Select>
+          </FormControl>
+        )}
+      />
+
+      <Input
+        type="submit"
+        disabled={isSubmitting}
+        value={isUpdateMode ? "Update" : "Create"}
+      />
+    </Box>
+  );
+}

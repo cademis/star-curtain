@@ -1,6 +1,6 @@
 export declare const userRouter: import("@trpc/server/unstable-core-do-not-import").BuiltRouter<{
     ctx: {
-        db: typeof import("@repo/db").db;
+        db: import("@prisma/client").PrismaClient<import("@prisma/client").Prisma.PrismaClientOptions, never, import("@prisma/client/runtime/library").DefaultArgs>;
     };
     meta: object;
     errorShape: import("@trpc/server/unstable-core-do-not-import").DefaultErrorShape;

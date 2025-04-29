@@ -3,13 +3,19 @@ import { initTRPC } from "@trpc/server";
 import { CreateExpressContextOptions } from "@trpc/server/adapters/express";
 import superjson from "superjson";
 
-export const createTRPCContext = ({}: CreateExpressContextOptions): {
-  db: typeof db;
-} => ({
+export const createTRPCContext = ({}: CreateExpressContextOptions) => ({
   db,
-}); // no context
+});
 
-export type TRPCContext = Awaited<ReturnType<typeof createTRPCContext>>;
+// export const createTRPCContext = ({
+//   req,
+//   res,
+// }: CreateExpressContextOptions): { db: typeof db } => ({
+//   db,
+// });
+
+// export type TRPCContext = Awaited<ReturnType<typeof createTRPCContext>>;
+export type TRPCContext = ReturnType<typeof createTRPCContext>;
 
 export const t = initTRPC
   .context<TRPCContext>()

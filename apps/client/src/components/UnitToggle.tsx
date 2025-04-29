@@ -22,7 +22,6 @@ export function UnitToggle({ unit, setUnit }: UnitSelectProps) {
       value={unit}
       exclusive
       onChange={handleChange}
-      aria-label="Platform"
     >
       {Object.values(Unit).map((value) => (
         <ToggleButton key={value} value={value}>

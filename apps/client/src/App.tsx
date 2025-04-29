@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { createTRPCClient, httpBatchLink } from "@trpc/client";
+import { createTRPCClient, httpBatchLink, loggerLink } from "@trpc/client";
 import { useState } from "react";
 import { TRPCProvider } from "./utils/trpc";
 import { AppRouter } from "@repo/trpc-server";
@@ -44,15 +44,20 @@ function getQueryClient() {
 }
 
 const theme = createTheme({
-  cssVariables: {
-    colorSchemeSelector: "data-toolpad-color-scheme",
+  palette: {
+    mode: "light",
+    primary: {
+      main: "#1976d2",
+    },
+    secondary: {
+      main: "#dc004e",
+    },
   },
-  colorSchemes: { light: true, dark: true },
   breakpoints: {
     values: {
       xs: 0,
       sm: 600,
-      md: 600,
+      md: 900,
       lg: 1200,
       xl: 1536,
     },
@@ -64,6 +69,7 @@ function App() {
   const [trpcClient] = useState(() =>
     createTRPCClient<AppRouter>({
       links: [
+        loggerLink(),
         httpBatchLink({
           url: "http://localhost:3000/trpc",
           transformer: superjson,

@@ -1,6 +1,6 @@
 export declare const apparatusRouter: import("@trpc/server/unstable-core-do-not-import").BuiltRouter<{
     ctx: {
-        db: typeof import("@repo/db").db;
+        db: import("@prisma/client").PrismaClient<import("@prisma/client").Prisma.PrismaClientOptions, never, import("@prisma/client/runtime/library").DefaultArgs>;
     };
     meta: object;
     errorShape: import("@trpc/server/unstable-core-do-not-import").DefaultErrorShape;
@@ -10,26 +10,27 @@ export declare const apparatusRouter: import("@trpc/server/unstable-core-do-not-
         input: {
             name: string;
             unit: string;
+            isUnilateral: boolean;
+            reps: number;
+            increment: number;
             movementType: string;
             bodyPart: string;
-            isUnilateral?: boolean | undefined;
-            baseRm?: number | undefined;
-            increment?: number | undefined;
+            oneRepMax?: number | undefined;
         };
         output: number;
     }>;
     getApparatusById: import("@trpc/server").TRPCQueryProcedure<{
-        input: number;
+        input: number | null;
         output: {
             id: number;
             name: string;
             unit: string;
-            baseRm: number | null;
-            brandId: number | null;
+            oneRepMax: number;
+            reps: number;
             isUnilateral: boolean;
             increment: number;
-            bodyPart: string | null;
-            movementType: string | null;
+            bodyPart: string;
+            movementType: string;
         } | null;
     }>;
     getApparatuses: import("@trpc/server").TRPCQueryProcedure<{
@@ -38,35 +39,36 @@ export declare const apparatusRouter: import("@trpc/server/unstable-core-do-not-
             id: number;
             name: string;
             unit: string;
-            baseRm: number | null;
-            brandId: number | null;
+            oneRepMax: number;
+            reps: number;
             isUnilateral: boolean;
             increment: number;
-            bodyPart: string | null;
-            movementType: string | null;
+            bodyPart: string;
+            movementType: string;
         }[];
     }>;
     updateApparatus: import("@trpc/server").TRPCMutationProcedure<{
         input: {
-            id: number;
             name: string;
             unit: string;
+            isUnilateral: boolean;
+            reps: number;
+            increment: number;
             movementType: string;
             bodyPart: string;
-            isUnilateral?: boolean | undefined;
-            baseRm?: number | undefined;
-            increment?: number | undefined;
+            id?: number | undefined;
+            oneRepMax?: number | undefined;
         };
         output: {
             id: number;
             name: string;
             unit: string;
-            baseRm: number | null;
-            brandId: number | null;
+            oneRepMax: number;
+            reps: number;
             isUnilateral: boolean;
             increment: number;
-            bodyPart: string | null;
-            movementType: string | null;
+            bodyPart: string;
+            movementType: string;
         };
     }>;
     deleteApparatusById: import("@trpc/server").TRPCMutationProcedure<{

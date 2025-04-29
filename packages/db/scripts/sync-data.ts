@@ -5,10 +5,13 @@ import path from "node:path";
 import dotenv from "dotenv";
 import { Api } from "./__generated__/Api.js";
 import { fileURLToPath } from "node:url";
-import { z } from "zod";
+import { string, z } from "zod";
 import { getActivitySchema } from "../src/schema/activity.js";
-
+import { getLastSyncPreviousDateAsync } from "./get-last-sync-date.js";
 dotenv.config();
+
+const RESULTS_PER_PAGE = 200; //max rate limit for my account is 200
+const DAYS_TO_SUBTRACT = 20;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -89,8 +92,11 @@ async function main() {
     //   }
     // );
 
+    const lastSyncPreviousDate =
+      await getLastSyncPreviousDateAsync(DAYS_TO_SUBTRACT);
+
     const response = await api.athlete.getLoggedInAthleteActivities(
-      { per_page: 200 },
+      { per_page: RESULTS_PER_PAGE, after: lastSyncPreviousDate },
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -111,26 +117,21 @@ async function main() {
     //   JSON.stringify(activities)
     // );
     // console.log(activities.filter((activity) => activity.type === "Ride"));
+    console.log({ activitiesFound: activities.length });
     for (let i = 0; i < activities.length; i++) {
-      // const {
-      //   id,
-      //   start_date,
-      //   average_heartrate,
-      //   type,
-      //   distance,
-      //   average_watts,
-      //   elapsed_time,
-      //   average_cadence,
-      // } = activities[i];
+      const mapString = activities[i]
+        ? JSON.stringify(activities[i].map)
+        : undefined;
 
-      const getActivitiesSchema = z.array(getActivitySchema);
+      const activitySchema = getActivitySchema;
 
-      const parsedActivities = getActivitiesSchema.parse(activities);
-
-      console.log({ a: activities.length, b: parsedActivities.length });
+      const parsedActivity = activitySchema.parse({
+        ...activities[i],
+        map: mapString,
+      });
 
       const {
-        id,
+        activityId,
         startDate,
         averageHeartrate,
         type,
@@ -138,21 +139,25 @@ async function main() {
         averageWatts,
         elapsedTime,
         averageCadence,
-      } = parsedActivities[i];
+        totalElevationGain,
+        map,
+      } = parsedActivity;
 
       await db.activity.upsert({
         where: {
-          id: id,
+          activityId: activityId.toString(),
         },
         create: {
-          activityId: id,
+          activityId: activityId.toString(),
           startDate,
           averageHeartrate,
           type,
           distance,
           averageWatts,
-          elapsedTime,
+          elapsedTime: elapsedTime?.toString(),
           averageCadence,
+          totalElevationGain,
+          map,
         },
         update: {
           startDate,
@@ -160,8 +165,9 @@ async function main() {
           type,
           distance,
           averageWatts,
-          elapsedTime,
+          elapsedTime: elapsedTime?.toString(),
           averageCadence,
+          totalElevationGain,
         },
       });
     }
@@ -177,12 +183,14 @@ interface Athlete {
   resource_state: number;
 }
 
-interface MapData {
+// https://developers.strava.com/docs/reference/#api-models-PolylineMap
+interface PolyLineMap {
   id: string;
   summary_polyline: string | null;
   resource_state: number;
 }
 
+// https://developers.strava.com/docs/reference/#api-models-SummaryActivity
 export interface Activity {
   resource_state: number;
   athlete: Athlete;
@@ -211,7 +219,7 @@ export interface Activity {
   comment_count: number;
   athlete_count: number;
   photo_count: number;
-  map: MapData;
+  map: PolyLineMap;
   trainer: boolean;
   commute: boolean;
   manual: boolean;

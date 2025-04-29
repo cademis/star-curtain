@@ -17,33 +17,35 @@ model User {
 
 model Activity {
   id Int @id @default(autoincrement())
-  activityId BigInt @unique
+  activityId String @unique
   startDate String?
   type String?
   averageHeartrate Float?
   distance Float? 
   averageWatts Float? 
   averageCadence Float?
-  elapsedTime BigInt?  
+  elapsedTime String?
+  totalElevationGain Int?
+  map String?
 }
+
+
 
 model Apparatus {
  id Int @id @default(autoincrement())
  name String
- unit String
- baseRm Int?
- brandId Int?
-  brand Brand? @relation(fields: [brandId],references: [id])
+ unit String 
+ oneRepMax Float @default(0)
+ reps Int
  isUnilateral Boolean
- increment Int
- bodyPart String?
- movementType String?
+ increment Int 
+ bodyPart String 
+ movementType String  
 }
 
-model Brand {
-  id Int @id @default(autoincrement())
-  name String
-  apparatuses Apparatus[]
+enum MyEnum {
+  HELLO
+  WORLD
 }
 
 model Log {

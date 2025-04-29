@@ -3,7 +3,7 @@ import { initTRPC } from "@trpc/server";
 import superjson from "superjson";
 export const createTRPCContext = ({}) => ({
     db,
-}); // no context
+});
 export const t = initTRPC
     .context()
     .create({ transformer: superjson });

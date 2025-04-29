@@ -6,36 +6,39 @@ import {
   GridActionsCellItem,
   useGridApiRef,
   DataGrid,
+  GridCellParams,
 } from "@mui/x-data-grid";
 
-import { generateReps } from "../utils/generateReps";
 import { bodyParts, movementTypes } from "@repo/db/schema/apparatus";
-import { EditModal } from "../components/EditModal";
+import { UpdateApparatus } from "./UpdateApparatus";
 import { useState } from "react";
-import { Button } from "@mui/material";
+import { Button, Modal } from "@mui/material";
 import { MovementFilter } from "./MovementFilter";
+import { CreateApparatus } from "./CreateApparatus";
+import {
+  calculateEstimatedOneRepMax,
+  calculateEstimatedWeight,
+} from "../utils";
 
 export default function Dashboard() {
   const [open, setOpen] = useState(false);
+  const [selectedRow, setSelectedRow] = useState<number | null>(null);
 
   const apiRef = useGridApiRef();
 
   const queryClient = useQueryClient();
   const trpc = useTRPC();
 
-  // const [name, setName] = useState("");
-  // const [unit, setUnit] = useState<UnitType>(Unit.Kg);
-  // const [isUnilateral, setIsUnilateral] = useState(false);
-  // const [bodyPart, setBodyPart] = useState<string>(bodyParts[0].field);
-
   const { data: rows } = useQuery(trpc.apparatus.getApparatuses.queryOptions());
 
   const { mutate: updateApparatus } = useMutation(
     trpc.apparatus.updateApparatus.mutationOptions({
       onSuccess: () => {
+        console.log("success!");
         const queryKey = trpc.apparatus.getApparatuses.queryKey();
         queryClient.invalidateQueries({ queryKey });
       },
+      onError: (err) => console.log("error", err),
     })
   );
 
@@ -76,32 +79,47 @@ export default function Dashboard() {
       // },
       width: 130,
       type: "boolean",
-      editable: true,
+      // editable: true,
     },
     {
       field: "unit",
       headerName: "Unit",
       width: 130,
     },
+    // {
+    //   field: "baseRm",
+    //   sortable: false,
+    //   headerName: "5 | 10 | 15",
+    //   type: "singleSelect",
+    //   width: 130,
+    //   valueOptions: (params) => {
+    //     const result = generateReps(params.row.increment);
+    //     return result;
+    //   },
+    //   getOptionValue: (value: unknown) =>
+    //     (value as ReturnType<typeof generateReps>).map(
+    //       (set) => set.find((item) => item.rm === 1)?.weight
+    //     ),
+    //   getOptionLabel: (value: unknown) => {
+    //     const { rm5, rm10 } = value as {
+    //       rm1: number;
+    //       rm5: number;
+    //       rm8: number;
+    //       rm10: number;
+    //       rm12: number;
+    //       rm15: number;
+    //     };
+    //     return ` ${rm5} | ${rm10}`;
+    //   },
+
+    // editable: true,
+    // },
     {
-      field: "baseRm",
-      sortable: false,
-      headerName: "1 5 8 12 15",
-      type: "singleSelect",
+      field: "reps",
+      headerName: "Reps",
+      type: "number",
       width: 130,
-      getOptionValue: (value: unknown) => (value as { rm8: number }).rm8,
-      getOptionLabel: (value: unknown) => {
-        const { rm1, rm5, rm8, rm12, rm15 } = value as {
-          rm1: number;
-          rm5: number;
-          rm8: number;
-          rm12: number;
-          rm15: number;
-        };
-        return `${rm1} ${rm5} ${rm8} ${rm12} ${rm15}`;
-      },
-      valueOptions: (params) => generateReps(params.row.increment),
-      editable: true,
+      // editable: true,
     },
     {
       field: "brandId",
@@ -114,7 +132,18 @@ export default function Dashboard() {
       headerName: "Increment",
       width: 130,
       type: "number",
-      editable: true,
+    },
+    {
+      field: "weight",
+      valueGetter: (_value, row) => {
+        const result = calculateEstimatedWeight(row.reps, row.oneRepMax);
+        return result;
+      },
+    },
+    {
+      field: "oneRepMax",
+      headerName: "One Rep Max",
+      width: 130,
     },
     {
       field: "movementType",
@@ -134,7 +163,7 @@ export default function Dashboard() {
       valueOptions: [...bodyParts],
       getOptionValue: (value: unknown) => (value as { field: string }).field,
       getOptionLabel: (value: unknown) => (value as { title: string }).title,
-      editable: true,
+      // editable: true,
     },
     {
       field: "actions",
@@ -151,35 +180,54 @@ export default function Dashboard() {
     },
   ];
 
+  const handleDoubleClick = (params: GridCellParams) => {
+    setSelectedRow(Number(params.id));
+    setOpen(true);
+  };
+
+  const handleButtonClick = () => {
+    setSelectedRow(null);
+    setOpen(true);
+  };
+
   if (!rows) {
     return <div>no data</div>;
   }
 
   return (
     <>
-      <EditModal open={open} setOpen={setOpen} />
-      <Button onClick={() => setOpen(true)}>New</Button>
+      <Modal open={open} onClose={() => setOpen(false)}>
+        {selectedRow ? (
+          <UpdateApparatus setOpen={setOpen} selectedRow={selectedRow} />
+        ) : (
+          <CreateApparatus setOpen={setOpen} />
+        )}
+      </Modal>
+      <Button onClick={handleButtonClick}>New</Button>
       <MovementFilter apiRef={apiRef} />
       <DataGrid
+        onCellDoubleClick={handleDoubleClick}
         apiRef={apiRef}
         rows={rows}
         columns={columns}
         processRowUpdate={(updatedRow /*, originalRow */) => {
-          console.log(updatedRow);
           const {
             id,
             name,
             unit,
-            baseRm,
             isUnilateral,
             increment,
             bodyPart,
             movementType,
+            reps,
+            weight,
           } = updatedRow;
+
+          const oneRepMax = calculateEstimatedOneRepMax(reps, weight);
 
           // Ensure all required fields have default values if undefined
           updateApparatus({
-            baseRm: baseRm || 1,
+            oneRepMax,
             id,
             isUnilateral: isUnilateral || false,
             name: name || "",
@@ -187,6 +235,7 @@ export default function Dashboard() {
             increment: increment || 1,
             bodyPart: bodyPart || bodyParts[0].field,
             movementType: movementType || movementTypes[0].field,
+            reps,
           });
           return updatedRow;
         }}
