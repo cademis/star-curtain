@@ -15,10 +15,8 @@ import { useState } from "react";
 import { Button, Modal } from "@mui/material";
 import { MovementFilter } from "./MovementFilter";
 import { CreateApparatus } from "./CreateApparatus";
-import {
-  calculateEstimatedOneRepMax,
-  calculateEstimatedWeight,
-} from "../utils";
+import { calculateEstimatedWeight } from "../utils";
+import { TRPCClientError } from "@trpc/client";
 
 export default function Dashboard() {
   const [open, setOpen] = useState(false);
@@ -34,11 +32,14 @@ export default function Dashboard() {
   const { mutate: updateApparatus } = useMutation(
     trpc.apparatus.updateApparatus.mutationOptions({
       onSuccess: () => {
-        console.log("success!");
         const queryKey = trpc.apparatus.getApparatuses.queryKey();
         queryClient.invalidateQueries({ queryKey });
       },
-      onError: (err) => console.log("error", err),
+      onError: (err) => {
+        throw new Error(
+          err instanceof TRPCClientError ? err.message : "Unknown error"
+        );
+      },
     })
   );
 
@@ -59,7 +60,7 @@ export default function Dashboard() {
   //   trpc
   // )
 
-  const columns: GridColDef[] = [
+  const columns: GridColDef<NonNullable<typeof rows>[number]>[] = [
     {
       field: "id",
       headerName: "ID",
@@ -74,58 +75,14 @@ export default function Dashboard() {
     {
       field: "isUnilateral",
       headerName: "Is Unilateral",
-      // valueSetter: (value) => {
-      //   return value ? "Unilateral" : "";
-      // },
       width: 130,
       type: "boolean",
-      // editable: true,
     },
-    {
-      field: "unit",
-      headerName: "Unit",
-      width: 130,
-    },
-    // {
-    //   field: "baseRm",
-    //   sortable: false,
-    //   headerName: "5 | 10 | 15",
-    //   type: "singleSelect",
-    //   width: 130,
-    //   valueOptions: (params) => {
-    //     const result = generateReps(params.row.increment);
-    //     return result;
-    //   },
-    //   getOptionValue: (value: unknown) =>
-    //     (value as ReturnType<typeof generateReps>).map(
-    //       (set) => set.find((item) => item.rm === 1)?.weight
-    //     ),
-    //   getOptionLabel: (value: unknown) => {
-    //     const { rm5, rm10 } = value as {
-    //       rm1: number;
-    //       rm5: number;
-    //       rm8: number;
-    //       rm10: number;
-    //       rm12: number;
-    //       rm15: number;
-    //     };
-    //     return ` ${rm5} | ${rm10}`;
-    //   },
-
-    // editable: true,
-    // },
     {
       field: "reps",
       headerName: "Reps",
       type: "number",
       width: 130,
-      // editable: true,
-    },
-    {
-      field: "brandId",
-      headerName: "Brand ID",
-      width: 130,
-      type: "number",
     },
     {
       field: "increment",
@@ -139,6 +96,11 @@ export default function Dashboard() {
         const result = calculateEstimatedWeight(row.reps, row.oneRepMax);
         return result;
       },
+    },
+    {
+      field: "unit",
+      headerName: "Unit",
+      width: 130,
     },
     {
       field: "oneRepMax",
@@ -163,7 +125,6 @@ export default function Dashboard() {
       valueOptions: [...bodyParts],
       getOptionValue: (value: unknown) => (value as { field: string }).field,
       getOptionLabel: (value: unknown) => (value as { title: string }).title,
-      // editable: true,
     },
     {
       field: "actions",
@@ -206,6 +167,7 @@ export default function Dashboard() {
       <Button onClick={handleButtonClick}>New</Button>
       <MovementFilter apiRef={apiRef} />
       <DataGrid
+        // data={}
         onCellDoubleClick={handleDoubleClick}
         apiRef={apiRef}
         rows={rows}
@@ -220,10 +182,10 @@ export default function Dashboard() {
             bodyPart,
             movementType,
             reps,
-            weight,
+            oneRepMax,
           } = updatedRow;
 
-          const oneRepMax = calculateEstimatedOneRepMax(reps, weight);
+          // const oneRepMax = calculateEstimatedOneRepMax(reps, weight);
 
           // Ensure all required fields have default values if undefined
           updateApparatus({

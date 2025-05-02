@@ -25,6 +25,7 @@ import { useEffect } from "react";
 import {
   calculateEstimatedOneRepMax,
   calculateEstimatedWeight,
+  roundToNearestIncrement,
 } from "../utils";
 
 const style: SxProps<Theme> = (theme) => ({
@@ -52,10 +53,11 @@ export function EditForm({ initialValues, onSubmit, id }: Props) {
   const isUpdateMode = !!id;
 
   const calculateInitialValues = () => {
-    const { oneRepMax, reps } = initialValues;
+    const { oneRepMax, reps, increment } = initialValues;
     if (!oneRepMax) throw Error("oneRepMax is undefined");
     const weight = calculateEstimatedWeight(reps, oneRepMax);
-    return { ...initialValues, weight };
+    const roundedWeight = roundToNearestIncrement(weight, increment || 2.5);
+    return { ...initialValues, weight: roundedWeight };
   };
 
   const {
@@ -65,7 +67,12 @@ export function EditForm({ initialValues, onSubmit, id }: Props) {
     watch,
     setValue,
     formState: { errors, isSubmitting },
-  } = useForm<z.infer<typeof upsertApparatusDtoSchema> & { weight?: number }>({
+  } = useForm<
+    z.infer<typeof upsertApparatusDtoSchema> & {
+      weight?: number;
+      increment?: number;
+    }
+  >({
     resolver: zodResolver(upsertApparatusDtoSchema),
     defaultValues: calculateInitialValues(),
   });
@@ -73,16 +80,18 @@ export function EditForm({ initialValues, onSubmit, id }: Props) {
   const weight = watch("weight");
   const reps = watch("reps");
 
-  // Update oneRepMax when weight or reps changes
   useEffect(() => {
-    if (weight && reps) {
-      setValue(
-        "oneRepMax",
-        calculateEstimatedOneRepMax(Number(weight), Number(reps))
-      );
-    } else {
-      setValue("oneRepMax", 1);
+    if (!weight || !reps) {
+      setValue("oneRepMax", 1, { shouldValidate: true });
+      setValue("weight", 1, { shouldValidate: true });
+      return;
     }
+
+    const newOneRepMax = calculateEstimatedOneRepMax(
+      Number(reps),
+      Number(weight)
+    );
+    setValue("oneRepMax", newOneRepMax, { shouldValidate: true });
   }, [weight, reps, setValue]);
 
   return (
@@ -113,19 +122,41 @@ export function EditForm({ initialValues, onSubmit, id }: Props) {
         }
       />
 
-      <Controller
-        control={control}
-        name="weight"
-        render={({ field }) => <TextField label="Weight" {...field} />}
-      />
+      <Box sx={{ display: "flex", gap: 2 }}>
+        <Controller
+          control={control}
+          name="reps"
+          render={({ field }) => (
+            <TextField label="Reps" type="number" {...field} />
+          )}
+        />
+        <Controller
+          control={control}
+          name="weight"
+          render={({ field }) => (
+            <TextField
+              label="Weight"
+              type="number"
+              {...field}
+              slotProps={{
+                input: {
+                  inputProps: {
+                    step: watch("increment"),
+                  },
+                },
+              }}
+            />
+          )}
+        />
 
-      <Controller
-        control={control}
-        name="reps"
-        render={({ field }) => (
-          <TextField label="Reps" type="number" {...field} />
-        )}
-      />
+        <Controller
+          control={control}
+          name="increment"
+          render={({ field }) => (
+            <TextField label="Increment" type="number" {...field} />
+          )}
+        />
+      </Box>
 
       <Controller
         control={control}

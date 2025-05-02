@@ -35,10 +35,10 @@ model Apparatus {
  id Int @id @default(autoincrement())
  name String
  unit String 
- oneRepMax Float @default(0)
- reps Int
+ oneRepMax Float @default(1)
+ reps Int @default(1)
  isUnilateral Boolean
- increment Int 
+ increment Int @default(1)
  bodyPart String 
  movementType String  
 }

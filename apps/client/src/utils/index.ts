@@ -87,3 +87,11 @@ export const generateReps = (step = 1) => {
     // };
   });
 };
+
+export const roundToNearestIncrement = (
+  value: number,
+  increment: number
+): number => {
+  if (increment <= 0) return value;
+  return Math.floor(value / increment) * increment;
+};
