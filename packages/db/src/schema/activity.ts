@@ -41,7 +41,7 @@ export const getActivitySchema = z
     };
   });
 
-const updateActivitySchema = z.object({
+export const updateActivitySchema = z.object({
   id: z.number(),
   startDate: z.string(),
   averageHeartrate: z.string(),

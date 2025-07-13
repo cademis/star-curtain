@@ -1,11 +1,9 @@
 import { db } from "@repo/db";
-import fs from "node:fs/promises";
-import path from "node:path";
+// import path from "node:path";
 
 import dotenv from "dotenv";
 import { Api } from "./__generated__/Api.js";
-import { fileURLToPath } from "node:url";
-import { string, z } from "zod";
+// import { fileURLToPath } from "node:url";
 import { getActivitySchema } from "../src/schema/activity.js";
 import { getLastSyncPreviousDateAsync } from "./get-last-sync-date.js";
 dotenv.config();
@@ -13,8 +11,8 @@ dotenv.config();
 const RESULTS_PER_PAGE = 200; //max rate limit for my account is 200
 const DAYS_TO_SUBTRACT = 20;
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// const __filename = fileURLToPath(import.meta.url);
+// const __dirname = path.dirname(__filename);
 
 /*
  * To properly authorize your application with Strava, visit:

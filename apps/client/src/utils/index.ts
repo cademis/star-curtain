@@ -95,3 +95,7 @@ export const roundToNearestIncrement = (
   if (increment <= 0) return value;
   return Math.floor(value / increment) * increment;
 };
+
+export const kgToLbs = (kg: number) => kg * 2.20462;
+
+export const lbsToKg = (lbs: number) => lbs / 2.20462;

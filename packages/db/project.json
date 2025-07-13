@@ -1,0 +1,39 @@
+{
+  "name": "db",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/db/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/db",
+        "main": "packages/db/src/index.ts",
+        "tsConfig": "packages/db/tsconfig.json",
+        "assets": ["packages/db/*.md"]
+      }
+    },
+    "dev": {
+      "executor": "@nx/js:tsc",
+      "options": {
+        "outputPath": "dist/packages/db",
+        "main": "packages/db/src/index.ts",
+        "tsConfig": "packages/db/tsconfig.json",
+        "watch": true
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "packages/db/jest.config.ts"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
+    }
+  },
+  "tags": ["type:lib", "scope:db"]
+}

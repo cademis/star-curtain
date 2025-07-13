@@ -17,9 +17,11 @@ import { MovementFilter } from "./MovementFilter";
 import { CreateApparatus } from "./CreateApparatus";
 import { calculateEstimatedWeight } from "../utils";
 import { TRPCClientError } from "@trpc/client";
+import { EditModal } from "./EditModal";
 
 export default function Dashboard() {
-  const [open, setOpen] = useState(false);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedRow, setSelectedRow] = useState<number | null>(null);
 
   const apiRef = useGridApiRef();
@@ -56,9 +58,10 @@ export default function Dashboard() {
     deleteApparatusById(id);
   };
 
-  // const {} useMutation(
-  //   trpc
-  // )
+  const handleEditClick = (id: GridRowId) => {
+    setSelectedRow(Number(id));
+    setIsEditModalOpen(true);
+  };
 
   const columns: GridColDef<NonNullable<typeof rows>[number]>[] = [
     {
@@ -137,18 +140,24 @@ export default function Dashboard() {
           onClick={() => handleDeleteClick(id)}
           showInMenu
         />,
+        <GridActionsCellItem
+          key="edit"
+          label="Edit Apparatus"
+          onClick={() => handleEditClick(id)}
+          showInMenu
+        />,
       ],
     },
   ];
 
   const handleDoubleClick = (params: GridCellParams) => {
     setSelectedRow(Number(params.id));
-    setOpen(true);
+    setIsCreateModalOpen(true);
   };
 
   const handleButtonClick = () => {
     setSelectedRow(null);
-    setOpen(true);
+    setIsCreateModalOpen(true);
   };
 
   if (!rows) {
@@ -157,13 +166,26 @@ export default function Dashboard() {
 
   return (
     <>
-      <Modal open={open} onClose={() => setOpen(false)}>
+      <Modal
+        open={isCreateModalOpen}
+        onClose={() => setIsCreateModalOpen(false)}
+      >
         {selectedRow ? (
-          <UpdateApparatus setOpen={setOpen} selectedRow={selectedRow} />
+          <UpdateApparatus
+            setOpen={setIsCreateModalOpen}
+            selectedRow={selectedRow}
+          />
         ) : (
-          <CreateApparatus setOpen={setOpen} />
+          <CreateApparatus setOpen={setIsCreateModalOpen} />
         )}
       </Modal>
+      {selectedRow && (
+        <EditModal
+          selectedRow={selectedRow}
+          open={isEditModalOpen}
+          setOpen={setIsEditModalOpen}
+        />
+      )}
       <Button onClick={handleButtonClick}>New</Button>
       <MovementFilter apiRef={apiRef} />
       <DataGrid
@@ -185,9 +207,6 @@ export default function Dashboard() {
             oneRepMax,
           } = updatedRow;
 
-          // const oneRepMax = calculateEstimatedOneRepMax(reps, weight);
-
-          // Ensure all required fields have default values if undefined
           updateApparatus({
             oneRepMax,
             id,

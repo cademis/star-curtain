@@ -4,11 +4,12 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
-    "lint": "eslint .",
-    "preview": "vite preview",
-    "start": "node"
+    "dev": "nx serve client",
+    "build": "nx build client",
+    "lint": "nx lint client",
+    "preview": "nx preview client",
+    "test": "nx test client",
+    "start": "node dist/apps/client"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",

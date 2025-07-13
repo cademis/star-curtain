@@ -1,0 +1,39 @@
+{
+  "name": "trpc-server",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/trpc-server/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/trpc-server",
+        "main": "packages/trpc-server/src/index.ts",
+        "tsConfig": "packages/trpc-server/tsconfig.json",
+        "assets": ["packages/trpc-server/*.md"]
+      }
+    },
+    "dev": {
+      "executor": "@nx/js:tsc",
+      "options": {
+        "outputPath": "dist/packages/trpc-server",
+        "main": "packages/trpc-server/src/index.ts",
+        "tsConfig": "packages/trpc-server/tsconfig.json",
+        "watch": true
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "packages/trpc-server/jest.config.ts"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
+    }
+  },
+  "tags": ["type:lib", "scope:trpc-server"]
+}

@@ -25,6 +25,8 @@ import { useEffect } from "react";
 import {
   calculateEstimatedOneRepMax,
   calculateEstimatedWeight,
+  kgToLbs,
+  lbsToKg,
   roundToNearestIncrement,
 } from "../utils";
 
@@ -53,11 +55,13 @@ export function EditForm({ initialValues, onSubmit, id }: Props) {
   const isUpdateMode = !!id;
 
   const calculateInitialValues = () => {
-    const { oneRepMax, reps, increment } = initialValues;
+    const { oneRepMax, reps, increment, unit } = initialValues;
     if (!oneRepMax) throw Error("oneRepMax is undefined");
     const weight = calculateEstimatedWeight(reps, oneRepMax);
     const roundedWeight = roundToNearestIncrement(weight, increment || 2.5);
-    return { ...initialValues, weight: roundedWeight };
+    const convertedWeight =
+      unit === "lbs" ? kgToLbs(roundedWeight) : roundedWeight;
+    return { ...initialValues, weight: convertedWeight };
   };
 
   const {
@@ -109,7 +113,21 @@ export function EditForm({ initialValues, onSubmit, id }: Props) {
                 color="primary"
                 value={value}
                 exclusive
-                onChange={onChange}
+                onChange={(_event, newValue) => {
+                  if (newValue !== null) {
+                    const currentWeight = watch("weight");
+                    if (currentWeight) {
+                      const convertedWeight =
+                        newValue === "lbs"
+                          ? kgToLbs(currentWeight)
+                          : lbsToKg(currentWeight);
+                      setValue("weight", convertedWeight, {
+                        shouldValidate: true,
+                      });
+                    }
+                    onChange(newValue);
+                  }
+                }}
               >
                 {Object.values(Unit).map((value) => (
                   <ToggleButton key={value} value={value}>
