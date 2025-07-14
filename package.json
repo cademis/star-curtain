@@ -1,38 +1,15 @@
 {
   "devDependencies": {
-    "@nx/eslint": "21.1.2",
-    "@nx/js": "21.1.2",
-    "@nx/jest": "21.1.2",
-    "@nx/vite": "21.1.2",
-    "@nx/web": "21.1.2",
-    "@nx/webpack": "21.1.2",
     "@vitest/ui": "^3.0.0",
     "concurrently": "^9.1.2",
     "jiti": "2.4.2",
-    "nx": "21.1.2",
     "typescript": "^5",
     "vite": "^6.0.0",
     "vitest": "^3.0.0"
   },
   "type": "module",
   "scripts": {
-    "dev": "nx run-many --target=serve --projects=client,server --parallel",
-    "dev:apps": "nx run-many --target=serve --projects=client,server --parallel",
-    "dev:packages": "nx run-many --target=dev --projects=db,trpc-server --parallel",
-    "build": "nx run-many --target=build --all",
-    "build:apps": "nx run-many --target=build --projects=client,server",
-    "build:packages": "nx run-many --target=build --projects=db,trpc-server",
-    "test": "nx run-many --target=test --all",
-    "test:apps": "nx run-many --target=test --projects=client,server",
-    "test:packages": "nx run-many --target=test --projects=db,trpc-server",
-    "lint": "nx run-many --target=lint --all",
-    "lint:apps": "nx run-many --target=lint --projects=client,server",
-    "lint:packages": "nx run-many --target=lint --projects=db,trpc-server",
-    "clean": "nx reset",
-    "graph": "nx graph",
-    "affected:build": "nx affected --target=build",
-    "affected:test": "nx affected --target=test",
-    "affected:lint": "nx affected --target=lint"
+    "dev": "concurrently -k -p \"[{name}]\" -n trpc-server,db,server,client \"pnpm --filter trpc-server run build:watch\" \"pnpm --filter db run build:watch\" \"pnpm --filter server run dev\" \"pnpm --filter client run dev\""
   },
   "packageManager": "pnpm@8.15.4",
   "dependencies": {

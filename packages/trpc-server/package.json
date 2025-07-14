@@ -17,8 +17,8 @@
   "types": "dist/index.d.ts",
   "description": "",
   "scripts": {
-    "dev": "tsc --build --watch",
     "build": "rm -rf dist && tsc",
+    "build:watch": "tsc -b -w",
     "lint": "eslint --debug ."
   },
   "keywords": [],

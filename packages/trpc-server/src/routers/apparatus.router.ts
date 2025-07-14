@@ -10,10 +10,27 @@ export const apparatusRouter = router({
   createApparatus: publicProcedure
     .input(createApparatusSchema)
     .mutation(async ({ input, ctx }) => {
-      input;
-
+      const {
+        bodyPart,
+        increment,
+        is_per_side,
+        movementType,
+        name,
+        unit,
+        oneRepMax,
+        starting_weight,
+      } = input;
       const result = await ctx.db.apparatus.create({
-        data: input,
+        data: {
+          bodyPart,
+          movementType,
+          name,
+          increment,
+          is_per_side,
+          oneRepMax,
+          starting_weight,
+          unit,
+        },
       });
       return result.id;
     }),
@@ -51,7 +68,7 @@ export const apparatusRouter = router({
     }),
 
   deleteApparatusById: publicProcedure
-    .input(z.union([z.string(), z.number()]).pipe(z.coerce.number()))
+    .input(z.number())
     .mutation(async ({ ctx, input }) => {
       await ctx.db.apparatus.delete({
         where: {

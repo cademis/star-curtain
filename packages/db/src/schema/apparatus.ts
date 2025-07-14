@@ -28,13 +28,13 @@ export const MovementTypeEnum = z.enum(
 const baseApparatus = {
   name: z.string(),
   unit: z.string(),
-  isUnilateral: z.boolean(),
-  reps: z.coerce.number(),
+  is_per_side: z.boolean(),
   increment: z.coerce.number(),
   movementType: z.string(),
   bodyPart: z.string(),
   oneRepMax: z.coerce.number().optional(),
-};
+  starting_weight: z.coerce.number().optional(),
+} as const;
 
 export const createApparatusSchema = z.object({
   ...baseApparatus,
@@ -54,3 +54,6 @@ export const upsertApparatusDtoSchema = z.object({
   id: z.number().optional(),
   ...baseApparatus,
 });
+
+// Type-safe utility to ensure schema matches Prisma expectations
+export type CreateApparatusInput = z.infer<typeof createApparatusSchema>;

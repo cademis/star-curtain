@@ -1,15 +1,10 @@
 {
-  "name": "star-curtain-client",
+  "name": "client",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "nx serve client",
-    "build": "nx build client",
-    "lint": "nx lint client",
-    "preview": "nx preview client",
-    "test": "nx test client",
-    "start": "node dist/apps/client"
+    "dev": "pnpm vite"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",

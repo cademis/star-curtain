@@ -34,13 +34,36 @@ model Activity {
 model Apparatus {
  id Int @id @default(autoincrement())
  name String
- unit String 
+ unit String @default("kg")
  oneRepMax Float @default(1)
- reps Int @default(1)
- isUnilateral Boolean
  increment Int @default(1)
  bodyPart String 
  movementType String  
+ is_per_side Boolean @default(true)
+ starting_weight Float @default(0)
+ logs Log[]
+}
+
+model Session {
+  id Int @id
+  date DateTime @default(now())
+  description String @default("")
+  notes String @default("")
+  logs Log[]
+}
+
+model Log {
+  id Int @id
+  apparatus_id Int
+  apparatus Apparatus @relation(fields: [apparatus_id], references: [id])
+  session_id Int
+  session Session @relation(fields: [session_id], references: [id])
+  weight Float?
+  sets Int @default(1)
+  reps Int @default(1)
+  rir Int @default(0)
+  actual_rir Int @default(0)
+  notes String  @default("")
 }
 
 enum MyEnum {
@@ -48,8 +71,6 @@ enum MyEnum {
   WORLD
 }
 
-model Log {
-  id Int @id
-}
+
 
 

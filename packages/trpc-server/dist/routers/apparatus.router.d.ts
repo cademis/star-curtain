@@ -10,12 +10,12 @@ export declare const apparatusRouter: import("@trpc/server/unstable-core-do-not-
         input: {
             name: string;
             unit: string;
-            isUnilateral: boolean;
-            reps: number;
+            is_per_side: boolean;
             increment: number;
             movementType: string;
             bodyPart: string;
             oneRepMax?: number | undefined;
+            starting_weight?: number | undefined;
         };
         output: number;
     }>;
@@ -26,11 +26,11 @@ export declare const apparatusRouter: import("@trpc/server/unstable-core-do-not-
             name: string;
             unit: string;
             oneRepMax: number;
-            reps: number;
-            isUnilateral: boolean;
             increment: number;
             bodyPart: string;
             movementType: string;
+            is_per_side: boolean;
+            starting_weight: number;
         } | null;
     }>;
     getApparatuses: import("@trpc/server").TRPCQueryProcedure<{
@@ -40,39 +40,39 @@ export declare const apparatusRouter: import("@trpc/server/unstable-core-do-not-
             name: string;
             unit: string;
             oneRepMax: number;
-            reps: number;
-            isUnilateral: boolean;
             increment: number;
             bodyPart: string;
             movementType: string;
+            is_per_side: boolean;
+            starting_weight: number;
         }[];
     }>;
     updateApparatus: import("@trpc/server").TRPCMutationProcedure<{
         input: {
             name: string;
             unit: string;
-            isUnilateral: boolean;
-            reps: number;
+            is_per_side: boolean;
             increment: number;
             movementType: string;
             bodyPart: string;
-            id?: number | undefined;
             oneRepMax?: number | undefined;
+            starting_weight?: number | undefined;
+            id?: number | undefined;
         };
         output: {
             id: number;
             name: string;
             unit: string;
             oneRepMax: number;
-            reps: number;
-            isUnilateral: boolean;
             increment: number;
             bodyPart: string;
             movementType: string;
+            is_per_side: boolean;
+            starting_weight: number;
         };
     }>;
     deleteApparatusById: import("@trpc/server").TRPCMutationProcedure<{
-        input: string | number;
+        input: number;
         output: void;
     }>;
 }>>;

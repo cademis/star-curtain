@@ -55,7 +55,7 @@ export default function Dashboard() {
   );
 
   const handleDeleteClick = (id: GridRowId) => {
-    deleteApparatusById(id);
+    deleteApparatusById(Number(id));
   };
 
   const handleEditClick = (id: GridRowId) => {
@@ -199,24 +199,24 @@ export default function Dashboard() {
             id,
             name,
             unit,
-            isUnilateral,
+            is_per_side,
             increment,
+            starting_weight,
             bodyPart,
             movementType,
-            reps,
             oneRepMax,
           } = updatedRow;
 
           updateApparatus({
             oneRepMax,
             id,
-            isUnilateral: isUnilateral || false,
+            is_per_side: is_per_side || false,
             name: name || "",
             unit: unit || "kg",
             increment: increment || 1,
             bodyPart: bodyPart || bodyParts[0].field,
             movementType: movementType || movementTypes[0].field,
-            reps,
+            starting_weight,
           });
           return updatedRow;
         }}

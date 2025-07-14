@@ -5,9 +5,8 @@ import { bodyParts, createApparatusSchema } from "@repo/db/schema/apparatus";
 const defaultValues: z.infer<typeof createApparatusSchema> = {
   name: "",
   unit: "kg",
-  isUnilateral: false,
-  baseRm: 0,
-  reps: 8,
+  is_per_side: false,
+  oneRepMax: 0,
   increment: 2.5,
   movementType: "",
   bodyPart: bodyParts[0].field,

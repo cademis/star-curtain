@@ -9,9 +9,6 @@ build/
 .nuxt/
 .output/
 
-# Nx
-.nx/
-.nx-cache/
 
 # Environment variables
 .env

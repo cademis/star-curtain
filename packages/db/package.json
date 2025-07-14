@@ -16,10 +16,9 @@
   },
   "description": "",
   "scripts": {
-    "dev": "nx dev db",
-    "build": "nx build db",
-    "lint": "nx lint db",
-    "test": "nx test db",
+    "build": "tsc -b",
+    "build:watch": "tsc -b -w",
+    "lint": "",
     "openapi-gen": "tsx ./scripts/swagger-codegen.js",
     "sync-data": "tsx scripts/sync-data.ts",
     "db:backup": "litestream replicate ./prisma/dev.db s3://sqlite-backup-yhsp/backup.db"
