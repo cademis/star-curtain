@@ -12,7 +12,5 @@ interface Props {
 export function UpdateLog({ selectedRow, setOpen }: Props) {
   const trpc = useTRPC();
 
-  const { data: log } = useQuery(trpc.log.getLog.queryOptions(selectedRow));
-
   return <EditLogForm onSubmit={} />;
 }
