@@ -1,4 +1,4 @@
-import { useTRPC } from "../utils/trpc";
+import { useTRPC } from "../../../utils/trpc";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   GridColDef,
@@ -13,13 +13,13 @@ import { bodyParts, movementTypes } from "@repo/db/schema/apparatus";
 import { UpdateApparatus } from "./UpdateApparatus";
 import { useState } from "react";
 import { Button, Modal } from "@mui/material";
-import { MovementFilter } from "./MovementFilter";
+import { MovementFilter } from "../../MovementFilter";
 import { CreateApparatus } from "./CreateApparatus";
-import { calculateEstimatedWeight } from "../utils";
+import { calculateEstimatedWeight } from "../../../utils";
 import { TRPCClientError } from "@trpc/client";
-import { EditModal } from "./EditModal";
+import { EditModal } from "../../EditModal";
 
-export default function Dashboard() {
+export default function ApparatusTable() {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedRow, setSelectedRow] = useState<number | null>(null);
@@ -29,12 +29,14 @@ export default function Dashboard() {
   const queryClient = useQueryClient();
   const trpc = useTRPC();
 
-  const { data: rows } = useQuery(trpc.apparatus.getApparatuses.queryOptions());
+  // const { data: rows } = useQuery(trpc.apparatus.getApparatuses.queryOptions());
+  const { data: rows } = useQuery(trpc.log.getLogsWithApparatus.queryOptions());
 
   const { mutate: updateApparatus } = useMutation(
     trpc.apparatus.updateApparatus.mutationOptions({
       onSuccess: () => {
-        const queryKey = trpc.apparatus.getApparatuses.queryKey();
+        const queryKey = trpc.log.getLogsWithApparatus.queryKey();
+        console.log({ queryKey });
         queryClient.invalidateQueries({ queryKey });
       },
       onError: (err) => {
@@ -48,7 +50,7 @@ export default function Dashboard() {
   const { mutate: deleteApparatusById } = useMutation(
     trpc.apparatus.deleteApparatusById.mutationOptions({
       onSuccess: () => {
-        const queryKey = trpc.apparatus.getApparatuses.queryKey();
+        const queryKey = trpc.log.getLogsWithApparatus.queryKey();
         queryClient.invalidateQueries({ queryKey });
       },
     })
@@ -76,8 +78,8 @@ export default function Dashboard() {
       width: 200,
     },
     {
-      field: "isUnilateral",
-      headerName: "Is Unilateral",
+      field: "is_per_side",
+      headerName: "Is Per Side",
       width: 130,
       type: "boolean",
     },
@@ -96,8 +98,7 @@ export default function Dashboard() {
     {
       field: "weight",
       valueGetter: (_value, row) => {
-        const result = calculateEstimatedWeight(row.reps, row.oneRepMax);
-        return result;
+        return calculateEstimatedWeight(row.reps, row.oneRepMax);
       },
     },
     {
@@ -184,19 +185,19 @@ export default function Dashboard() {
           selectedRow={selectedRow}
           open={isEditModalOpen}
           setOpen={setIsEditModalOpen}
+          mode="log"
         />
       )}
       <Button onClick={handleButtonClick}>New</Button>
       <MovementFilter apiRef={apiRef} />
       <DataGrid
-        // data={}
         onCellDoubleClick={handleDoubleClick}
         apiRef={apiRef}
         rows={rows}
         columns={columns}
         processRowUpdate={(updatedRow /*, originalRow */) => {
           const {
-            id,
+            apparatus_id,
             name,
             unit,
             is_per_side,
@@ -209,7 +210,7 @@ export default function Dashboard() {
 
           updateApparatus({
             oneRepMax,
-            id,
+            id: apparatus_id, // Use apparatus_id instead of log id
             is_per_side: is_per_side || false,
             name: name || "",
             unit: unit || "kg",

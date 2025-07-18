@@ -35,7 +35,12 @@ const values = [
   { rm: 30, percentage: 50 },
 ] as const;
 
-export const calculateEstimatedOneRepMax = (reps: number, weight: number) => {
+export const calculateEstimatedOneRepMax = (
+  reps: number | undefined,
+  weight: number | undefined
+): number | null => {
+  if (reps === undefined || weight === undefined) return null;
+
   if (reps < 1 || reps > 30) {
     throw Error("Reps must be between 1 and 30");
   }

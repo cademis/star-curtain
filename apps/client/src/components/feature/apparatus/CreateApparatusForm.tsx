@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { EditForm } from "./EditForm";
+import { EditForm } from "./EditApparatusForm";
 import { bodyParts, createApparatusSchema } from "@repo/db/schema/apparatus";
 
 const defaultValues: z.infer<typeof createApparatusSchema> = {

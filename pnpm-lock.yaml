@@ -192,25 +192,6 @@ importers:
         specifier: ^5
         version: 5.8.2
 
-  packages/cron:
-    dependencies:
-      '@repo/db':
-        specifier: workspace:*
-        version: link:../db
-      dotenv:
-        specifier: ^16.4.5
-        version: 16.4.7
-    devDependencies:
-      swagger-typescript-api:
-        specifier: ^13.0.24
-        version: 13.0.24
-      tsx:
-        specifier: ^4.19.1
-        version: 4.19.3
-      typescript:
-        specifier: ^5.8.2
-        version: 5.8.2
-
   packages/db:
     dependencies:
       '@prisma/client':

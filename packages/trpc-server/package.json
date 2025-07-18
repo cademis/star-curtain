@@ -12,6 +12,10 @@
     "./routers/*": {
       "default": "./dist/routers/*.js",
       "types": "./dist/routers/*.d.ts"
+    },
+    "./schemas/*": {
+      "default": "./dist/schemas/*.js",
+      "types": "./dist/schemas/*.d.ts"
     }
   },
   "types": "dist/index.d.ts",

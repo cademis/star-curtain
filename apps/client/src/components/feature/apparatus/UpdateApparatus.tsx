@@ -1,8 +1,8 @@
-import { useTRPC } from "../utils/trpc";
+import { useTRPC } from "../../../utils/trpc";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { upsertApparatusDtoSchema } from "@repo/db/schema/apparatus";
 import * as z from "zod";
-import { EditForm } from "./EditForm";
+import { EditApparatusForm } from "./EditApparatusForm";
 
 type Props = {
   setOpen: (value: boolean) => void;
@@ -42,7 +42,7 @@ export function UpdateApparatus({ selectedRow, setOpen }: Props) {
   }
 
   return (
-    <EditForm
+    <EditApparatusForm
       initialValues={selectedApparatus}
       onSubmit={handleSubmit}
       id={selectedRow}

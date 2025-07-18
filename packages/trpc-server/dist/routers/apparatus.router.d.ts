@@ -55,9 +55,9 @@ export declare const apparatusRouter: import("@trpc/server/unstable-core-do-not-
             increment: number;
             movementType: string;
             bodyPart: string;
+            id?: number | undefined;
             oneRepMax?: number | undefined;
             starting_weight?: number | undefined;
-            id?: number | undefined;
         };
         output: {
             id: number;

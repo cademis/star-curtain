@@ -4,7 +4,7 @@ import { useState } from "react";
 import { TRPCProvider } from "./utils/trpc";
 import { AppRouter } from "@repo/trpc-server";
 import superjson from "superjson";
-import Dashboard from "./components/Dashboard";
+import Dashboard from "./components/layout/Dashboard";
 import { createBrowserRouter, RouterProvider } from "react-router";
 import { createTheme, ThemeProvider } from "@mui/material";
 

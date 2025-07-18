@@ -94,9 +94,9 @@ export declare const appRouter: import("@trpc/server/unstable-core-do-not-import
                 increment: number;
                 movementType: string;
                 bodyPart: string;
+                id?: number | undefined;
                 oneRepMax?: number | undefined;
                 starting_weight?: number | undefined;
-                id?: number | undefined;
             };
             output: {
                 id: number;
@@ -126,9 +126,9 @@ export declare const appRouter: import("@trpc/server/unstable-core-do-not-import
         getActivities: import("@trpc/server").TRPCQueryProcedure<{
             input: void;
             output: {
-                id: number;
                 type: string | null;
                 map: string | null;
+                id: number;
                 activityId: string;
                 startDate: string | null;
                 averageHeartrate: number | null;
@@ -138,6 +138,96 @@ export declare const appRouter: import("@trpc/server/unstable-core-do-not-import
                 elapsedTime: string | null;
                 totalElevationGain: number | null;
             }[];
+        }>;
+    }>>;
+    log: import("@trpc/server/unstable-core-do-not-import").BuiltRouter<{
+        ctx: {
+            db: import("@prisma/client").PrismaClient<import("@prisma/client").Prisma.PrismaClientOptions, never, import("@prisma/client/runtime/library").DefaultArgs>;
+        };
+        meta: object;
+        errorShape: import("@trpc/server/unstable-core-do-not-import").DefaultErrorShape;
+        transformer: true;
+    }, import("@trpc/server/unstable-core-do-not-import").DecorateCreateRouterOptions<{
+        getLogById: import("@trpc/server").TRPCQueryProcedure<{
+            input: number;
+            output: {
+                id: number;
+                apparatus_id: number | null;
+                session_id: number | null;
+                weight: number;
+                sets: number;
+                reps: number;
+                rir: number;
+                notes: string;
+            } | null;
+        }>;
+        getLogsWithApparatus: import("@trpc/server").TRPCQueryProcedure<{
+            input: void;
+            output: {
+                apparatus: undefined;
+                id: number;
+                name?: string | undefined;
+                unit?: string | undefined;
+                oneRepMax?: number | undefined;
+                increment?: number | undefined;
+                bodyPart?: string | undefined;
+                movementType?: string | undefined;
+                is_per_side?: boolean | undefined;
+                starting_weight?: number | undefined;
+                apparatus_id: number | null;
+                session_id: number | null;
+                weight: number;
+                sets: number;
+                reps: number;
+                rir: number;
+                notes: string;
+            }[];
+        }>;
+        getLog: import("@trpc/server").TRPCQueryProcedure<{
+            input: number;
+            output: ({
+                apparatus: {
+                    id: number;
+                    name: string;
+                    unit: string;
+                    oneRepMax: number;
+                    increment: number;
+                    bodyPart: string;
+                    movementType: string;
+                    is_per_side: boolean;
+                    starting_weight: number;
+                } | null;
+            } & {
+                id: number;
+                apparatus_id: number | null;
+                session_id: number | null;
+                weight: number;
+                sets: number;
+                reps: number;
+                rir: number;
+                notes: string;
+            }) | null;
+        }>;
+        createLog: import("@trpc/server").TRPCMutationProcedure<{
+            input: {
+                apparatus_id?: number | undefined;
+                session_id?: number | undefined;
+                weight?: number | undefined;
+                sets?: number | undefined;
+                reps?: number | undefined;
+                rir?: number | undefined;
+                notes?: string | undefined;
+            };
+            output: {
+                id: number;
+                apparatus_id: number | null;
+                session_id: number | null;
+                weight: number;
+                sets: number;
+                reps: number;
+                rir: number;
+                notes: string;
+            };
         }>;
     }>>;
 }>>;

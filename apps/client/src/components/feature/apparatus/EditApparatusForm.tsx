@@ -13,7 +13,6 @@ import {
   Theme,
 } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
-import { Unit } from "../constants";
 import { z } from "zod";
 import {
   bodyParts,
@@ -21,14 +20,6 @@ import {
   upsertApparatusDtoSchema,
 } from "@repo/db/schema/apparatus";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect } from "react";
-import {
-  calculateEstimatedOneRepMax,
-  calculateEstimatedWeight,
-  kgToLbs,
-  lbsToKg,
-  roundToNearestIncrement,
-} from "../utils";
 
 const style: SxProps<Theme> = (theme) => ({
   position: "absolute",
@@ -51,18 +42,8 @@ type Props = {
   id?: number;
 };
 
-export function EditForm({ initialValues, onSubmit, id }: Props) {
+export function EditApparatusForm({ initialValues, onSubmit, id }: Props) {
   const isUpdateMode = !!id;
-
-  const calculateInitialValues = () => {
-    const { oneRepMax, reps, increment, unit } = initialValues;
-    if (!oneRepMax) throw Error("oneRepMax is undefined");
-    const weight = calculateEstimatedWeight(reps, oneRepMax);
-    const roundedWeight = roundToNearestIncrement(weight, increment || 2.5);
-    const convertedWeight =
-      unit === "lbs" ? kgToLbs(roundedWeight) : roundedWeight;
-    return { ...initialValues, weight: convertedWeight };
-  };
 
   const {
     register,
@@ -71,38 +52,16 @@ export function EditForm({ initialValues, onSubmit, id }: Props) {
     watch,
     setValue,
     formState: { errors, isSubmitting },
-  } = useForm<
-    z.infer<typeof upsertApparatusDtoSchema> & {
-      weight?: number;
-      increment?: number;
-    }
-  >({
+  } = useForm<z.infer<typeof upsertApparatusDtoSchema>>({
     resolver: zodResolver(upsertApparatusDtoSchema),
-    defaultValues: calculateInitialValues(),
+    defaultValues: initialValues,
   });
-
-  const weight = watch("weight");
-  const reps = watch("reps");
-
-  useEffect(() => {
-    if (!weight || !reps) {
-      setValue("oneRepMax", 1, { shouldValidate: true });
-      setValue("weight", 1, { shouldValidate: true });
-      return;
-    }
-
-    const newOneRepMax = calculateEstimatedOneRepMax(
-      Number(reps),
-      Number(weight)
-    );
-    setValue("oneRepMax", newOneRepMax, { shouldValidate: true });
-  }, [weight, reps, setValue]);
 
   return (
     <Box sx={style} component={"form"} onSubmit={handleSubmit(onSubmit)}>
       <TextField label="Name" {...register("name")} />
 
-      <FormControlLabel
+      {/* <FormControlLabel
         label="Unit"
         control={
           <Controller
@@ -138,19 +97,19 @@ export function EditForm({ initialValues, onSubmit, id }: Props) {
             )}
           />
         }
-      />
+      /> */}
 
       <Box sx={{ display: "flex", gap: 2 }}>
         <Controller
           control={control}
-          name="reps"
+          name="starting_weight"
           render={({ field }) => (
-            <TextField label="Reps" type="number" {...field} />
+            <TextField label="Starting Weight" type="number" {...field} />
           )}
         />
-        <Controller
+        {/* <Controller
           control={control}
-          name="weight"
+          name=""
           render={({ field }) => (
             <TextField
               label="Weight"
@@ -165,7 +124,7 @@ export function EditForm({ initialValues, onSubmit, id }: Props) {
               }}
             />
           )}
-        />
+        /> */}
 
         <Controller
           control={control}
@@ -185,10 +144,10 @@ export function EditForm({ initialValues, onSubmit, id }: Props) {
       />
 
       <FormControlLabel
-        label="Is Unilateral"
+        label="Is Per Side"
         control={
           <Controller
-            name="isUnilateral"
+            name="is_per_side"
             control={control}
             render={({ field: { onChange, value } }) => (
               <ToggleButtonGroup
