@@ -126,17 +126,17 @@ export declare const appRouter: import("@trpc/server/unstable-core-do-not-import
         getActivities: import("@trpc/server").TRPCQueryProcedure<{
             input: void;
             output: {
-                type: string | null;
-                map: string | null;
                 id: number;
                 activityId: string;
                 startDate: string | null;
+                type: string | null;
                 averageHeartrate: number | null;
                 distance: number | null;
                 averageWatts: number | null;
                 averageCadence: number | null;
                 elapsedTime: string | null;
                 totalElevationGain: number | null;
+                map: string | null;
             }[];
         }>;
     }>>;
@@ -151,7 +151,6 @@ export declare const appRouter: import("@trpc/server/unstable-core-do-not-import
         getLogById: import("@trpc/server").TRPCQueryProcedure<{
             input: number;
             output: {
-                id: number;
                 apparatus_id: number | null;
                 session_id: number | null;
                 weight: number;
@@ -159,7 +158,21 @@ export declare const appRouter: import("@trpc/server/unstable-core-do-not-import
                 reps: number;
                 rir: number;
                 notes: string;
+                id: number;
             } | null;
+        }>;
+        getLogs: import("@trpc/server").TRPCQueryProcedure<{
+            input: void;
+            output: {
+                apparatus_id: number | null;
+                session_id: number | null;
+                weight: number;
+                sets: number;
+                reps: number;
+                rir: number;
+                notes: string;
+                id: number;
+            }[];
         }>;
         getLogsWithApparatus: import("@trpc/server").TRPCQueryProcedure<{
             input: void;
@@ -185,20 +198,7 @@ export declare const appRouter: import("@trpc/server/unstable-core-do-not-import
         }>;
         getLog: import("@trpc/server").TRPCQueryProcedure<{
             input: number;
-            output: ({
-                apparatus: {
-                    id: number;
-                    name: string;
-                    unit: string;
-                    oneRepMax: number;
-                    increment: number;
-                    bodyPart: string;
-                    movementType: string;
-                    is_per_side: boolean;
-                    starting_weight: number;
-                } | null;
-            } & {
-                id: number;
+            output: {
                 apparatus_id: number | null;
                 session_id: number | null;
                 weight: number;
@@ -206,12 +206,13 @@ export declare const appRouter: import("@trpc/server/unstable-core-do-not-import
                 reps: number;
                 rir: number;
                 notes: string;
-            }) | null;
+                id: number;
+            } | null;
         }>;
         createLog: import("@trpc/server").TRPCMutationProcedure<{
             input: {
-                apparatus_id?: number | undefined;
-                session_id?: number | undefined;
+                apparatus_id: number | null;
+                session_id: number | null;
                 weight?: number | undefined;
                 sets?: number | undefined;
                 reps?: number | undefined;
@@ -219,7 +220,6 @@ export declare const appRouter: import("@trpc/server/unstable-core-do-not-import
                 notes?: string | undefined;
             };
             output: {
-                id: number;
                 apparatus_id: number | null;
                 session_id: number | null;
                 weight: number;
@@ -227,7 +227,21 @@ export declare const appRouter: import("@trpc/server/unstable-core-do-not-import
                 reps: number;
                 rir: number;
                 notes: string;
+                id: number;
             };
+        }>;
+        updateLog: import("@trpc/server").TRPCMutationProcedure<{
+            input: {
+                apparatus_id: number | null;
+                session_id: number | null;
+                id: number;
+                weight?: number | undefined;
+                sets?: number | undefined;
+                reps?: number | undefined;
+                rir?: number | undefined;
+                notes?: string | undefined;
+            };
+            output: void;
         }>;
     }>>;
 }>>;

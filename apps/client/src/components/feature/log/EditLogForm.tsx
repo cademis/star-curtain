@@ -1,11 +1,9 @@
 import { Box, SxProps, TextField, Theme } from "@mui/material";
 import { useForm, useWatch } from "react-hook-form";
-import { z } from "zod";
-import { useTRPC } from "../../../utils/trpc";
+import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { calculateEstimatedOneRepMax } from "../../../utils";
-import { upsertLogSchema } from "@repo/trpc-server/schemas/log.schema";
-import { useQuery } from "@tanstack/react-query";
+import { updateLogSchema } from "@repo/trpc-server/schemas/log.schema";
 
 const style: SxProps<Theme> = (theme) => ({
   position: "absolute",
@@ -14,7 +12,7 @@ const style: SxProps<Theme> = (theme) => ({
   transform: "translate(-50%, -50%)",
   width: 400,
   bgcolor: "background.paper",
-  border: "2px solid #000",
+  border: "2px solid rgb(0, 0, 0)",
   boxShadow: 24,
   p: 4,
   display: "flex",
@@ -22,36 +20,61 @@ const style: SxProps<Theme> = (theme) => ({
   gap: theme.spacing(1),
 });
 
+type UpdateLogSchema = z.infer<typeof updateLogSchema>;
+
 interface Props {
-  id?: number;
-  onSubmit: (data: z.infer<typeof upsertLogSchema>) => void;
+  log: UpdateLogSchema | null;
+  onSubmit: (data: UpdateLogSchema) => void;
 }
 
-export function EditLogForm({ onSubmit, id }: Props) {
-  const isCreateMode = id == null;
+const updateLogFormSchema = updateLogSchema.omit({ id: true });
+type UpdateLogFormSchema = z.infer<typeof updateLogFormSchema>;
 
-  const trpc = useTRPC();
+export function EditLogForm({ onSubmit, log }: Props) {
   const { handleSubmit, register, control } = useForm({
-    resolver: zodResolver(upsertLogSchema),
+    mode: "onBlur",
+    resolver: zodResolver(updateLogFormSchema),
+    defaultValues: log || updateLogFormSchema.parse({}),
   });
 
   const [weight, reps] = useWatch({ control, name: ["weight", "reps"] });
 
-  const { data: log } = useQuery({
-    ...trpc.log.getLog.queryOptions(id!),
-    enabled: !isCreateMode,
-  });
-
   const e1rm = calculateEstimatedOneRepMax(reps, weight);
 
-  console.log(log);
+  const handleValidSubmit = (data: UpdateLogFormSchema) => {
+    if (!log?.id) {
+      console.error("Log ID is missing, cannot submit form.");
+      return;
+    }
+    onSubmit({ ...data, id: log.id });
+  };
+
+  const onSubmitHandler = handleSubmit(handleValidSubmit);
 
   return (
-    <Box sx={style} component={"form"} onSubmit={handleSubmit(onSubmit)}>
-      <TextField label="Weight" type="number" {...register("weight")} />
-      <TextField label="Sets" type="number" {...register("sets")} />
-      <TextField label="Reps" type="number" {...register("reps")} />
-      <TextField label="e1rm" type="number" value={e1rm} />
+    <Box sx={style} component={"form"} onSubmit={onSubmitHandler}>
+      <TextField
+        label="Weight"
+        type="number"
+        {...register("weight", { valueAsNumber: true })}
+      />
+      <TextField
+        label="Sets"
+        type="number"
+        {...register("sets", { valueAsNumber: true })}
+      />
+      <TextField
+        label="Reps"
+        type="number"
+        {...register("reps", { valueAsNumber: true })}
+      />
+      <TextField
+        label="RIR"
+        type="number"
+        {...register("rir", { valueAsNumber: true })}
+      />
+      <TextField label="Notes" {...register("notes")} />
+      <TextField label="e1rm" type="number" value={e1rm} disabled />
     </Box>
   );
 }

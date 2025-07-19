@@ -14,8 +14,8 @@
 import { z } from "zod";
 
 const baseLog = {
-  apparatus_id: z.number().optional(),
-  session_id: z.number().optional(),
+  apparatus_id: z.number().nullable(),
+  session_id: z.number().nullable(),
   weight: z.number().default(0),
   sets: z.number().default(1),
   reps: z.number().default(1),

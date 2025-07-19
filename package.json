@@ -9,7 +9,7 @@
   },
   "type": "module",
   "scripts": {
-    "dev": "concurrently -k -p \"[{name}]\" -n trpc-server,db,server,client \"pnpm --filter trpc-server run build:watch\" \"pnpm --filter db run build:watch\" \"pnpm --filter server run dev\" \"pnpm --filter client run dev\""
+    "dev": "concurrently -k -p \"[{name}]\" -n trpc-server,db,server,client --passthrough \"pnpm --filter trpc-server run build:watch\" \"pnpm --filter db run build:watch\" \"pnpm --filter server run dev\" \"pnpm --filter client run dev\""
   },
   "packageManager": "pnpm@8.15.4",
   "dependencies": {

@@ -9,17 +9,17 @@ export declare const activityRouter: import("@trpc/server/unstable-core-do-not-i
     getActivities: import("@trpc/server").TRPCQueryProcedure<{
         input: void;
         output: {
-            type: string | null;
-            map: string | null;
             id: number;
             activityId: string;
             startDate: string | null;
+            type: string | null;
             averageHeartrate: number | null;
             distance: number | null;
             averageWatts: number | null;
             averageCadence: number | null;
             elapsedTime: string | null;
             totalElevationGain: number | null;
+            map: string | null;
         }[];
     }>;
 }>>;

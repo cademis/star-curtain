@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTRPC } from "../../../utils/trpc";
 import { EditLogForm } from "./EditLogForm";
 import { z } from "zod";
-import { createLogSchema } from "@repo/db/schema/log";
+import { createLogSchema } from "@repo/db/schema/log.schema";
 import { useState } from "react";
 
 type Props = {

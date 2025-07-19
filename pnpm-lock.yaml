@@ -43,8 +43,8 @@ importers:
         specifier: ^5.2.5
         version: 5.2.5
       '@hookform/resolvers':
-        specifier: ^5.0.1
-        version: 5.0.1(react-hook-form@7.55.0)
+        specifier: ^5.1.1
+        version: 5.1.1(react-hook-form@7.55.0)
       '@mui/icons-material':
         specifier: ^6.4.8
         version: 6.4.8(@mui/material@7.0.2)(@types/react@19.0.12)(react@19.0.0)
@@ -100,8 +100,8 @@ importers:
         specifier: ^4.0.16
         version: 4.0.16
       zod:
-        specifier: 3.24.2
-        version: 3.24.2
+        specifier: 4.0.5
+        version: 4.0.5
     devDependencies:
       '@eslint/js':
         specifier: ^9.21.0
@@ -241,8 +241,8 @@ importers:
         specifier: ^2.2.2
         version: 2.2.2
       zod:
-        specifier: ^3.24.2
-        version: 3.24.2
+        specifier: ^4.0.5
+        version: 4.0.5
     devDependencies:
       '@eslint/js':
         specifier: ^9.21.0
@@ -1331,8 +1331,8 @@ packages:
     resolution: {integrity: sha512-70r2UZ0raqLn5W+sPeKhqlf8wGvUXFWlofaDlcbt/S3d06+17gXKr3VNqDODB0I1ASme3dGT5OJj9NABt7OTZQ==}
     dev: false
 
-  /@hookform/resolvers@5.0.1(react-hook-form@7.55.0):
-    resolution: {integrity: sha512-u/+Jp83luQNx9AdyW2fIPGY6Y7NG68eN2ZW8FOJYL+M0i4s49+refdJdOp/A9n9HFQtQs3HIDHQvX3ZET2o7YA==}
+  /@hookform/resolvers@5.1.1(react-hook-form@7.55.0):
+    resolution: {integrity: sha512-J/NVING3LMAEvexJkyTLjruSm7aOFx7QX21pzkiJfMoNG0wl5aFEjLTl7ay7IQb9EWY6AkrBy7tHL2Alijpdcg==}
     peerDependencies:
       react-hook-form: ^7.55.0
     dependencies:
@@ -8436,6 +8436,10 @@ packages:
 
   /zod@3.24.2:
     resolution: {integrity: sha512-lY7CDW43ECgW9u1TcT3IoXHflywfVqDYze4waEz812jR/bZ8FHDsl7pFQoSZTz5N+2NqRXs8GBwnAwo3ZNxqhQ==}
+    dev: false
+
+  /zod@4.0.5:
+    resolution: {integrity: sha512-/5UuuRPStvHXu7RS+gmvRf4NXrNxpSllGwDnCBcJZtQsKrviYXm54yDGV2KYNLT5kq0lHGcl7lqWJLgSaG+tgA==}
     dev: false
 
   /zwitch@2.0.4:

@@ -13,7 +13,7 @@ import { useState } from "react";
 import { Button, Modal } from "@mui/material";
 import { MovementFilter } from "../../MovementFilter";
 import { calculateEstimatedWeight } from "../../../utils";
-import { TRPCClientError } from "@trpc/client";
+// import { TRPCClientError } from "@trpc/client";
 import { EditModal } from "../../EditModal";
 import { UpdateLog } from "./UpdateLog";
 import { CreateLog } from "./CreateLog";
@@ -29,22 +29,21 @@ export default function LogsTable() {
   const trpc = useTRPC();
 
   // const { data: rows } = useQuery(trpc.apparatus.getApparatuses.queryOptions());
-  const { data: rows } = useQuery(trpc.log.getLogsWithApparatus.queryOptions());
+  const { data: rows } = useQuery(trpc.log.getLogs.queryOptions());
 
-  const { mutate: updateApparatus } = useMutation(
-    trpc.apparatus.updateApparatus.mutationOptions({
-      onSuccess: () => {
-        const queryKey = trpc.log.getLogsWithApparatus.queryKey();
-        console.log({ queryKey });
-        queryClient.invalidateQueries({ queryKey });
-      },
-      onError: (err) => {
-        throw new Error(
-          err instanceof TRPCClientError ? err.message : "Unknown error"
-        );
-      },
-    })
-  );
+  // const { mutate: updateLog } = useMutation(
+  //   trpc.log.updateLog.mutationOptions({
+  //     onSuccess: () => {
+  //       const queryKey = trpc.log.getLogs.queryKey();
+  //       queryClient.invalidateQueries({ queryKey });
+  //     },
+  //     onError: (err) => {
+  //       throw new Error(
+  //         err instanceof TRPCClientError ? err.message : "Unknown error"
+  //       );
+  //     },
+  //   })
+  // );
 
   const { mutate: deleteApparatusById } = useMutation(
     trpc.apparatus.deleteApparatusById.mutationOptions({
@@ -72,12 +71,12 @@ export default function LogsTable() {
       type: "number",
     },
     {
-      field: "name",
+      field: "weight",
       headerName: "Name",
       width: 200,
     },
     {
-      field: "is_per_side",
+      field: "sets",
       headerName: "Is Per Side",
       width: 130,
       type: "boolean",
@@ -89,45 +88,16 @@ export default function LogsTable() {
       width: 130,
     },
     {
-      field: "increment",
+      field: "rir",
       headerName: "Increment",
       width: 130,
       type: "number",
     },
     {
-      field: "weight",
-      valueGetter: (_value, row) => {
-        return calculateEstimatedWeight(row.reps, row.oneRepMax);
-      },
-    },
-    {
-      field: "unit",
-      headerName: "Unit",
+      field: "notes",
+      headerName: "Increment",
       width: 130,
-    },
-    {
-      field: "oneRepMax",
-      headerName: "One Rep Max",
-      width: 130,
-    },
-    {
-      field: "movementType",
-      headerName: "Movement Type",
-      width: 130,
-      type: "singleSelect",
-      valueOptions: [...movementTypes],
-      getOptionValue: (value: unknown) => (value as { field: string }).field,
-      getOptionLabel: (value: unknown) => (value as { title: string }).title,
-      editable: true,
-    },
-    {
-      field: "bodyPart",
-      headerName: "Body Part",
-      width: 130,
-      type: "singleSelect",
-      valueOptions: [...bodyParts],
-      getOptionValue: (value: unknown) => (value as { field: string }).field,
-      getOptionLabel: (value: unknown) => (value as { title: string }).title,
+      type: "number",
     },
     {
       field: "actions",
@@ -212,7 +182,7 @@ export default function LogsTable() {
             oneRepMax,
           } = updatedRow;
 
-          updateApparatus({
+          updateLog({
             oneRepMax,
             id: apparatus_id, // Use apparatus_id instead of log id
             is_per_side: is_per_side || false,
