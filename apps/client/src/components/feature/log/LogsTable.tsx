@@ -8,12 +8,9 @@ import {
   DataGrid,
   GridCellParams,
 } from "@mui/x-data-grid";
-import { bodyParts, movementTypes } from "@repo/db/schema/apparatus";
 import { useState } from "react";
 import { Button, Modal } from "@mui/material";
 import { MovementFilter } from "../../MovementFilter";
-import { calculateEstimatedWeight } from "../../../utils";
-// import { TRPCClientError } from "@trpc/client";
 import { EditModal } from "../../EditModal";
 import { UpdateLog } from "./UpdateLog";
 import { CreateLog } from "./CreateLog";
@@ -31,22 +28,8 @@ export default function LogsTable() {
   // const { data: rows } = useQuery(trpc.apparatus.getApparatuses.queryOptions());
   const { data: rows } = useQuery(trpc.log.getLogs.queryOptions());
 
-  // const { mutate: updateLog } = useMutation(
-  //   trpc.log.updateLog.mutationOptions({
-  //     onSuccess: () => {
-  //       const queryKey = trpc.log.getLogs.queryKey();
-  //       queryClient.invalidateQueries({ queryKey });
-  //     },
-  //     onError: (err) => {
-  //       throw new Error(
-  //         err instanceof TRPCClientError ? err.message : "Unknown error"
-  //       );
-  //     },
-  //   })
-  // );
-
-  const { mutate: deleteApparatusById } = useMutation(
-    trpc.apparatus.deleteApparatusById.mutationOptions({
+  const { mutate: deleteLogById } = useMutation(
+    trpc.log.deleteLogById.mutationOptions({
       onSuccess: () => {
         const queryKey = trpc.log.getLogsWithApparatus.queryKey();
         queryClient.invalidateQueries({ queryKey });
@@ -55,7 +38,7 @@ export default function LogsTable() {
   );
 
   const handleDeleteClick = (id: GridRowId) => {
-    deleteApparatusById(Number(id));
+    deleteLogById(Number(id));
   };
 
   const handleEditClick = (id: GridRowId) => {
@@ -72,12 +55,12 @@ export default function LogsTable() {
     },
     {
       field: "weight",
-      headerName: "Name",
+      headerName: "Weight",
       width: 200,
     },
     {
       field: "sets",
-      headerName: "Is Per Side",
+      headerName: "Sets",
       width: 130,
       type: "boolean",
     },
@@ -89,13 +72,13 @@ export default function LogsTable() {
     },
     {
       field: "rir",
-      headerName: "Increment",
+      headerName: "RIR",
       width: 130,
       type: "number",
     },
     {
       field: "notes",
-      headerName: "Increment",
+      headerName: "Notes",
       width: 130,
       type: "number",
     },
@@ -149,7 +132,7 @@ export default function LogsTable() {
           <CreateApparatus setOpen={setIsCreateModalOpen} />
         )} */}
         {selectedRow ? (
-          <UpdateLog setOpen={setIsCreateModalOpen} selectedRow={selectedRow} />
+          <UpdateLog setOpen={setIsCreateModalOpen} id={selectedRow} />
         ) : (
           <CreateLog setOpen={setIsCreateModalOpen} />
         )}
@@ -169,32 +152,6 @@ export default function LogsTable() {
         apiRef={apiRef}
         rows={rows}
         columns={columns}
-        processRowUpdate={(updatedRow /*, originalRow */) => {
-          const {
-            apparatus_id,
-            name,
-            unit,
-            is_per_side,
-            increment,
-            starting_weight,
-            bodyPart,
-            movementType,
-            oneRepMax,
-          } = updatedRow;
-
-          updateLog({
-            oneRepMax,
-            id: apparatus_id, // Use apparatus_id instead of log id
-            is_per_side: is_per_side || false,
-            name: name || "",
-            unit: unit || "kg",
-            increment: increment || 1,
-            bodyPart: bodyPart || bodyParts[0].field,
-            movementType: movementType || movementTypes[0].field,
-            starting_weight,
-          });
-          return updatedRow;
-        }}
       />
     </>
   );

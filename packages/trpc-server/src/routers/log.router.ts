@@ -5,6 +5,7 @@ import {
   updateLogSchema,
   upsertLogSchema,
 } from "../schemas/log.schema.js";
+import { TRPCError } from "@trpc/server";
 
 export const logRouter = router({
   getLogById: publicProcedure
@@ -81,5 +82,26 @@ export const logRouter = router({
           weight,
         },
       });
+    }),
+  deleteLogById: publicProcedure
+    .input(z.number())
+    .mutation(async ({ ctx, input }) => {
+      try {
+        await ctx.db.log.delete({ where: { id: input } });
+      } catch (err: any) {
+        if (err.code === `P2025`) {
+          // Record not found
+          throw new TRPCError({
+            code: `NOT_FOUND`,
+            message: `Log with id ${input} not found`,
+          });
+        }
+
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to delete log",
+        });
+      }
+      return { success: true };
     }),
 });

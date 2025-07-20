@@ -6,8 +6,9 @@ import { EditLogForm } from "./EditLogForm";
 
 interface Props {
   id: number;
+  setOpen: (value: boolean) => void;
 }
-export function UpdateLog({ id }: Props) {
+export function UpdateLog({ id, setOpen }: Props) {
   const trpc = useTRPC();
   const queryClient = useQueryClient();
 
@@ -15,6 +16,7 @@ export function UpdateLog({ id }: Props) {
     ...trpc.log.updateLog.mutationOptions(),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: trpc.log.getLog.queryKey(id) });
+      setOpen(false);
     },
   });
 
