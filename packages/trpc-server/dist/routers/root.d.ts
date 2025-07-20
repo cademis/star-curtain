@@ -46,16 +46,7 @@ export declare const appRouter: import("@trpc/server/unstable-core-do-not-import
         transformer: true;
     }, import("@trpc/server/unstable-core-do-not-import").DecorateCreateRouterOptions<{
         createApparatus: import("@trpc/server").TRPCMutationProcedure<{
-            input: {
-                name: string;
-                unit: string;
-                is_per_side: boolean;
-                increment: number;
-                movementType: string;
-                bodyPart: string;
-                oneRepMax?: number | undefined;
-                starting_weight?: number | undefined;
-            };
+            input: any;
             output: number;
         }>;
         getApparatusById: import("@trpc/server").TRPCQueryProcedure<{
@@ -87,17 +78,7 @@ export declare const appRouter: import("@trpc/server/unstable-core-do-not-import
             }[];
         }>;
         updateApparatus: import("@trpc/server").TRPCMutationProcedure<{
-            input: {
-                name: string;
-                unit: string;
-                is_per_side: boolean;
-                increment: number;
-                movementType: string;
-                bodyPart: string;
-                id?: number | undefined;
-                oneRepMax?: number | undefined;
-                starting_weight?: number | undefined;
-            };
+            input: any;
             output: {
                 id: number;
                 name: string;
@@ -242,6 +223,12 @@ export declare const appRouter: import("@trpc/server/unstable-core-do-not-import
                 notes?: string | undefined;
             };
             output: void;
+        }>;
+        deleteLogById: import("@trpc/server").TRPCMutationProcedure<{
+            input: number;
+            output: {
+                success: boolean;
+            };
         }>;
     }>>;
 }>>;
