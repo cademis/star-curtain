@@ -7,52 +7,71 @@ export declare const apparatusRouter: import("@trpc/server/unstable-core-do-not-
     transformer: true;
 }, import("@trpc/server/unstable-core-do-not-import").DecorateCreateRouterOptions<{
     createApparatus: import("@trpc/server").TRPCMutationProcedure<{
-        input: any;
+        input: {
+            name: string;
+            unit: string;
+            is_per_side: boolean;
+            increment: unknown;
+            movementType: string;
+            bodyPart: string;
+            oneRepMax: unknown;
+            starting_weight: unknown;
+        };
         output: number;
     }>;
-    getApparatusById: import("@trpc/server").TRPCQueryProcedure<{
+    getApparatus: import("@trpc/server").TRPCQueryProcedure<{
         input: number | null;
         output: {
             id: number;
             name: string;
             unit: string;
-            oneRepMax: number;
-            increment: number;
-            bodyPart: string;
-            movementType: string;
             is_per_side: boolean;
+            increment: number;
+            movementType: string;
+            bodyPart: string;
+            oneRepMax: number;
             starting_weight: number;
         } | null;
     }>;
-    getApparatuses: import("@trpc/server").TRPCQueryProcedure<{
+    getAllApparatus: import("@trpc/server").TRPCQueryProcedure<{
         input: void;
         output: {
             id: number;
             name: string;
             unit: string;
-            oneRepMax: number;
-            increment: number;
-            bodyPart: string;
-            movementType: string;
             is_per_side: boolean;
+            increment: number;
+            movementType: string;
+            bodyPart: string;
+            oneRepMax: number;
             starting_weight: number;
         }[];
     }>;
     updateApparatus: import("@trpc/server").TRPCMutationProcedure<{
-        input: any;
+        input: {
+            name: string;
+            unit: string;
+            is_per_side: boolean;
+            increment: unknown;
+            movementType: string;
+            bodyPart: string;
+            oneRepMax: unknown;
+            starting_weight: unknown;
+            id: number;
+        };
         output: {
             id: number;
             name: string;
             unit: string;
-            oneRepMax: number;
-            increment: number;
-            bodyPart: string;
-            movementType: string;
             is_per_side: boolean;
+            increment: number;
+            movementType: string;
+            bodyPart: string;
+            oneRepMax: number;
             starting_weight: number;
         };
     }>;
-    deleteApparatusById: import("@trpc/server").TRPCMutationProcedure<{
+    deleteApparatus: import("@trpc/server").TRPCMutationProcedure<{
         input: number;
         output: void;
     }>;

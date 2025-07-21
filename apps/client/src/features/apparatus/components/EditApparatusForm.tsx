@@ -17,6 +17,7 @@ import { z } from "zod";
 import {
   bodyParts,
   movementTypes,
+  updateApparatusSchema,
 } from "@repo/trpc-server/schemas/apparatus.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -36,10 +37,10 @@ const style: SxProps<Theme> = (theme) => ({
 });
 
 type Props = {
-  onSubmit: (data: z.infer<typeof upsertApparatusDtoSchema>) => void;
+  onSubmit: (data: z.infer<typeof updateApparatusSchema>) => void;
 };
 
-export function EditApparatusForm({ onSubmit, id }: Props) {
+export function UpdateApparatusForm({ onSubmit, id }: Props) {
   const isUpdateMode = !!id;
 
   const {
@@ -47,52 +48,14 @@ export function EditApparatusForm({ onSubmit, id }: Props) {
     handleSubmit,
     control,
     formState: { errors, isSubmitting },
-  } = useForm<z.infer<typeof upsertApparatusDtoSchema>>({
-    resolver: zodResolver(upsertApparatusDtoSchema),
+  } = useForm({
+    resolver: zodResolver(updateApparatusSchema),
     defaultValues: {},
   });
 
   return (
     <Box sx={style} component={"form"} onSubmit={handleSubmit(onSubmit)}>
       <TextField label="Name" {...register("name")} />
-
-      {/* <FormControlLabel
-        label="Unit"
-        control={
-          <Controller
-            name="unit"
-            control={control}
-            render={({ field: { onChange, value } }) => (
-              <ToggleButtonGroup
-                color="primary"
-                value={value}
-                exclusive
-                onChange={(_event, newValue) => {
-                  if (newValue !== null) {
-                    const currentWeight = watch("weight");
-                    if (currentWeight) {
-                      const convertedWeight =
-                        newValue === "lbs"
-                          ? kgToLbs(currentWeight)
-                          : lbsToKg(currentWeight);
-                      setValue("weight", convertedWeight, {
-                        shouldValidate: true,
-                      });
-                    }
-                    onChange(newValue);
-                  }
-                }}
-              >
-                {Object.values(Unit).map((value) => (
-                  <ToggleButton key={value} value={value}>
-                    {value.toLocaleUpperCase()}
-                  </ToggleButton>
-                ))}
-              </ToggleButtonGroup>
-            )}
-          />
-        }
-      /> */}
 
       <Box sx={{ display: "flex", gap: 2 }}>
         <Controller
@@ -102,24 +65,6 @@ export function EditApparatusForm({ onSubmit, id }: Props) {
             <TextField label="Starting Weight" type="number" {...field} />
           )}
         />
-        {/* <Controller
-          control={control}
-          name=""
-          render={({ field }) => (
-            <TextField
-              label="Weight"
-              type="number"
-              {...field}
-              slotProps={{
-                input: {
-                  inputProps: {
-                    step: watch("increment"),
-                  },
-                },
-              }}
-            />
-          )}
-        /> */}
 
         <Controller
           control={control}

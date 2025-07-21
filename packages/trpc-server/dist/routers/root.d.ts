@@ -46,52 +46,71 @@ export declare const appRouter: import("@trpc/server/unstable-core-do-not-import
         transformer: true;
     }, import("@trpc/server/unstable-core-do-not-import").DecorateCreateRouterOptions<{
         createApparatus: import("@trpc/server").TRPCMutationProcedure<{
-            input: any;
+            input: {
+                name: string;
+                unit: string;
+                is_per_side: boolean;
+                increment: unknown;
+                movementType: string;
+                bodyPart: string;
+                oneRepMax: unknown;
+                starting_weight: unknown;
+            };
             output: number;
         }>;
-        getApparatusById: import("@trpc/server").TRPCQueryProcedure<{
+        getApparatus: import("@trpc/server").TRPCQueryProcedure<{
             input: number | null;
             output: {
                 id: number;
                 name: string;
                 unit: string;
-                oneRepMax: number;
-                increment: number;
-                bodyPart: string;
-                movementType: string;
                 is_per_side: boolean;
+                increment: number;
+                movementType: string;
+                bodyPart: string;
+                oneRepMax: number;
                 starting_weight: number;
             } | null;
         }>;
-        getApparatuses: import("@trpc/server").TRPCQueryProcedure<{
+        getAllApparatus: import("@trpc/server").TRPCQueryProcedure<{
             input: void;
             output: {
                 id: number;
                 name: string;
                 unit: string;
-                oneRepMax: number;
-                increment: number;
-                bodyPart: string;
-                movementType: string;
                 is_per_side: boolean;
+                increment: number;
+                movementType: string;
+                bodyPart: string;
+                oneRepMax: number;
                 starting_weight: number;
             }[];
         }>;
         updateApparatus: import("@trpc/server").TRPCMutationProcedure<{
-            input: any;
+            input: {
+                name: string;
+                unit: string;
+                is_per_side: boolean;
+                increment: unknown;
+                movementType: string;
+                bodyPart: string;
+                oneRepMax: unknown;
+                starting_weight: unknown;
+                id: number;
+            };
             output: {
                 id: number;
                 name: string;
                 unit: string;
-                oneRepMax: number;
-                increment: number;
-                bodyPart: string;
-                movementType: string;
                 is_per_side: boolean;
+                increment: number;
+                movementType: string;
+                bodyPart: string;
+                oneRepMax: number;
                 starting_weight: number;
             };
         }>;
-        deleteApparatusById: import("@trpc/server").TRPCMutationProcedure<{
+        deleteApparatus: import("@trpc/server").TRPCMutationProcedure<{
             input: number;
             output: void;
         }>;
@@ -108,16 +127,16 @@ export declare const appRouter: import("@trpc/server/unstable-core-do-not-import
             input: void;
             output: {
                 id: number;
+                map: string | null;
+                type: string | null;
                 activityId: string;
                 startDate: string | null;
-                type: string | null;
                 averageHeartrate: number | null;
                 distance: number | null;
                 averageWatts: number | null;
                 averageCadence: number | null;
                 elapsedTime: string | null;
                 totalElevationGain: number | null;
-                map: string | null;
             }[];
         }>;
     }>>;
@@ -129,54 +148,6 @@ export declare const appRouter: import("@trpc/server/unstable-core-do-not-import
         errorShape: import("@trpc/server/unstable-core-do-not-import").DefaultErrorShape;
         transformer: true;
     }, import("@trpc/server/unstable-core-do-not-import").DecorateCreateRouterOptions<{
-        getLogById: import("@trpc/server").TRPCQueryProcedure<{
-            input: number;
-            output: {
-                id: number;
-                apparatus_id: number | null;
-                session_id: number | null;
-                weight: number;
-                sets: number;
-                reps: number;
-                rir: number;
-                notes: string;
-            } | null;
-        }>;
-        getLogs: import("@trpc/server").TRPCQueryProcedure<{
-            input: void;
-            output: {
-                id: number;
-                apparatus_id: number | null;
-                session_id: number | null;
-                weight: number;
-                sets: number;
-                reps: number;
-                rir: number;
-                notes: string;
-            }[];
-        }>;
-        getLogsWithApparatus: import("@trpc/server").TRPCQueryProcedure<{
-            input: void;
-            output: {
-                apparatus: undefined;
-                id: number;
-                name?: string | undefined;
-                unit?: string | undefined;
-                oneRepMax?: number | undefined;
-                increment?: number | undefined;
-                bodyPart?: string | undefined;
-                movementType?: string | undefined;
-                is_per_side?: boolean | undefined;
-                starting_weight?: number | undefined;
-                apparatus_id: number | null;
-                session_id: number | null;
-                weight: number;
-                sets: number;
-                reps: number;
-                rir: number;
-                notes: string;
-            }[];
-        }>;
         getLog: import("@trpc/server").TRPCQueryProcedure<{
             input: number;
             output: {
@@ -189,6 +160,41 @@ export declare const appRouter: import("@trpc/server/unstable-core-do-not-import
                 rir: number;
                 notes: string;
             } | null;
+        }>;
+        getAllLogs: import("@trpc/server").TRPCQueryProcedure<{
+            input: void;
+            output: {
+                id: number;
+                apparatus_id: number | null;
+                session_id: number | null;
+                weight: number;
+                sets: number;
+                reps: number;
+                rir: number;
+                notes: string;
+            }[];
+        }>;
+        getAllLogsWithApparatus: import("@trpc/server").TRPCQueryProcedure<{
+            input: void;
+            output: {
+                apparatus: undefined;
+                id: number;
+                name?: string | undefined;
+                unit?: string | undefined;
+                is_per_side?: boolean | undefined;
+                increment?: number | undefined;
+                movementType?: string | undefined;
+                bodyPart?: string | undefined;
+                oneRepMax?: number | undefined;
+                starting_weight?: number | undefined;
+                apparatus_id: number | null;
+                session_id: number | null;
+                weight: number;
+                sets: number;
+                reps: number;
+                rir: number;
+                notes: string;
+            }[];
         }>;
         createLog: import("@trpc/server").TRPCMutationProcedure<{
             input: {
@@ -224,7 +230,7 @@ export declare const appRouter: import("@trpc/server/unstable-core-do-not-import
             };
             output: void;
         }>;
-        deleteLogById: import("@trpc/server").TRPCMutationProcedure<{
+        deleteLog: import("@trpc/server").TRPCMutationProcedure<{
             input: number;
             output: {
                 success: boolean;

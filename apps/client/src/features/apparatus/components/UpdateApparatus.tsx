@@ -14,14 +14,14 @@ export function UpdateApparatus({ selectedRow, setOpen }: Props) {
   const queryClient = useQueryClient();
 
   const { data: selectedApparatus } = useQuery({
-    ...trpc.apparatus.getApparatusById.queryOptions(selectedRow),
+    ...trpc.apparatus.getApparatus.queryOptions(selectedRow),
   });
 
   const { mutate: updateApparatus } = useMutation(
     trpc.apparatus.updateApparatus.mutationOptions({
       onSuccess: () => {
         queryClient.invalidateQueries({
-          queryKey: trpc.apparatus.getApparatuses.queryKey(),
+          queryKey: trpc.apparatus.getAllApparatus.queryKey(),
         });
         setOpen(false);
       },

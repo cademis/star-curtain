@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { publicProcedure, router } from "../trpc.js";
-import { createApparatusSchema, upsertApparatusDtoSchema, } from "@repo/db/schema/apparatus";
+import { createApparatusSchema, updateApparatusSchema, } from "../schemas/apparatus.schema.js";
 export const apparatusRouter = router({
     createApparatus: publicProcedure
         .input(createApparatusSchema)
@@ -20,7 +20,7 @@ export const apparatusRouter = router({
         });
         return result.id;
     }),
-    getApparatusById: publicProcedure
+    getApparatus: publicProcedure
         .input(z.number().nullable())
         .query(async ({ ctx, input }) => {
         if (input === null) {
@@ -36,11 +36,11 @@ export const apparatusRouter = router({
         }
         return result;
     }),
-    getApparatuses: publicProcedure.query(async ({ ctx }) => {
+    getAllApparatus: publicProcedure.query(async ({ ctx }) => {
         return await ctx.db.apparatus.findMany();
     }),
     updateApparatus: publicProcedure
-        .input(upsertApparatusDtoSchema)
+        .input(updateApparatusSchema)
         .mutation(async ({ input, ctx }) => {
         const { id, ...data } = input;
         const result = await ctx.db.apparatus.update({
@@ -49,7 +49,7 @@ export const apparatusRouter = router({
         });
         return result;
     }),
-    deleteApparatusById: publicProcedure
+    deleteApparatus: publicProcedure
         .input(z.number())
         .mutation(async ({ ctx, input }) => {
         await ctx.db.apparatus.delete({
