@@ -1,25 +1,11 @@
-import {
-  FormLabel,
-  ToggleButton,
-  ToggleButtonGroup,
-  FormControl,
-  FormControlLabel,
-  TextField,
-  MenuItem,
-  Select,
-  Input,
-  Box,
-  SxProps,
-  Theme,
-} from "@mui/material";
-import { Controller, useForm } from "react-hook-form";
-import { z } from "zod";
-import {
-  bodyParts,
-  movementTypes,
-  upsertApparatusDtoSchema,
-} from "@repo/db/schema/apparatus";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { Box, FormControl, FormControlLabel, FormLabel, Input, MenuItem, Select, SxProps, TextField, Theme, ToggleButton, ToggleButtonGroup } from "@mui/material";
+import { bodyParts, movementTypes } from "@repo/trpc-server/schemas/apparatus.schema";
+import { Controller, useForm } from "react-hook-form"
+
+type Props = {
+    form: ReturnType<typeof useForm>
+    onSubmit: 
+}
 
 const style: SxProps<Theme> = (theme) => ({
   position: "absolute",
@@ -36,29 +22,9 @@ const style: SxProps<Theme> = (theme) => ({
   gap: theme.spacing(1),
 });
 
-type Props = {
-  initialValues: z.infer<typeof upsertApparatusDtoSchema>;
-  onSubmit: (data: z.infer<typeof upsertApparatusDtoSchema>) => void;
-  id?: number;
-};
-
-export function EditApparatusForm({ initialValues, onSubmit, id }: Props) {
-  const isUpdateMode = !!id;
-
-  const {
-    register,
-    handleSubmit,
-    control,
-    watch,
-    setValue,
-    formState: { errors, isSubmitting },
-  } = useForm<z.infer<typeof upsertApparatusDtoSchema>>({
-    resolver: zodResolver(upsertApparatusDtoSchema),
-    defaultValues: initialValues,
-  });
-
-  return (
-    <Box sx={style} component={"form"} onSubmit={handleSubmit(onSubmit)}>
+export function ApparatusForm({form, onSubmit}:Props) {
+    const {register,handleSubmit,control} = form
+return <Box sx={style} component={"form"} onSubmit={handleSubmit(onSubmit)}>
       <TextField label="Name" {...register("name")} />
 
       {/* <FormControlLabel
@@ -211,5 +177,4 @@ export function EditApparatusForm({ initialValues, onSubmit, id }: Props) {
         value={isUpdateMode ? "Update" : "Create"}
       />
     </Box>
-  );
 }

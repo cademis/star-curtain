@@ -132,6 +132,7 @@ export declare const appRouter: import("@trpc/server/unstable-core-do-not-import
         getLogById: import("@trpc/server").TRPCQueryProcedure<{
             input: number;
             output: {
+                id: number;
                 apparatus_id: number | null;
                 session_id: number | null;
                 weight: number;
@@ -139,12 +140,12 @@ export declare const appRouter: import("@trpc/server/unstable-core-do-not-import
                 reps: number;
                 rir: number;
                 notes: string;
-                id: number;
             } | null;
         }>;
         getLogs: import("@trpc/server").TRPCQueryProcedure<{
             input: void;
             output: {
+                id: number;
                 apparatus_id: number | null;
                 session_id: number | null;
                 weight: number;
@@ -152,7 +153,6 @@ export declare const appRouter: import("@trpc/server/unstable-core-do-not-import
                 reps: number;
                 rir: number;
                 notes: string;
-                id: number;
             }[];
         }>;
         getLogsWithApparatus: import("@trpc/server").TRPCQueryProcedure<{
@@ -180,6 +180,7 @@ export declare const appRouter: import("@trpc/server/unstable-core-do-not-import
         getLog: import("@trpc/server").TRPCQueryProcedure<{
             input: number;
             output: {
+                id: number;
                 apparatus_id: number | null;
                 session_id: number | null;
                 weight: number;
@@ -187,20 +188,20 @@ export declare const appRouter: import("@trpc/server/unstable-core-do-not-import
                 reps: number;
                 rir: number;
                 notes: string;
-                id: number;
             } | null;
         }>;
         createLog: import("@trpc/server").TRPCMutationProcedure<{
             input: {
-                apparatus_id: number | null;
-                session_id: number | null;
-                weight?: number | undefined;
-                sets?: number | undefined;
-                reps?: number | undefined;
-                rir?: number | undefined;
-                notes?: string | undefined;
+                apparatus_id: unknown;
+                session_id: unknown;
+                weight: unknown;
+                sets: unknown;
+                reps: unknown;
+                rir: unknown;
+                notes: string;
             };
             output: {
+                id: number;
                 apparatus_id: number | null;
                 session_id: number | null;
                 weight: number;
@@ -208,19 +209,18 @@ export declare const appRouter: import("@trpc/server/unstable-core-do-not-import
                 reps: number;
                 rir: number;
                 notes: string;
-                id: number;
             };
         }>;
         updateLog: import("@trpc/server").TRPCMutationProcedure<{
             input: {
-                apparatus_id: number | null;
-                session_id: number | null;
+                apparatus_id: unknown;
+                session_id: unknown;
+                weight: unknown;
+                sets: unknown;
+                reps: unknown;
+                rir: unknown;
+                notes: string;
                 id: number;
-                weight?: number | undefined;
-                sets?: number | undefined;
-                reps?: number | undefined;
-                rir?: number | undefined;
-                notes?: string | undefined;
             };
             output: void;
         }>;

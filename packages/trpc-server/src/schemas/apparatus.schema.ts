@@ -25,35 +25,40 @@ export const MovementTypeEnum = z.enum(
   movementTypes.map((part) => part.field) as [string, ...string[]]
 );
 
+// model Apparatus {
+//  id Int @id @default(autoincrement())
+//  name String
+//  unit String
+//  oneRepMax Float
+//  increment Int
+//  bodyPart String
+//  movementType String
+//  is_per_side Boolean
+//  starting_weight Float
+//  logs Log[]
+// }
+
 const baseApparatus = {
   name: z.string(),
   unit: z.string(),
   is_per_side: z.boolean(),
-  increment: z.coerce.number(),
+  increment: z.coerce.number().min(0.1),
   movementType: z.string(),
   bodyPart: z.string(),
-  oneRepMax: z.coerce.number().optional(),
-  starting_weight: z.coerce.number().optional(),
+  oneRepMax: z.coerce.number().min(0),
+  starting_weight: z.coerce.number().min(0),
 } as const;
 
-export const createApparatusSchema = z.object({
-  ...baseApparatus,
-});
-
-export const selectApparatusSchema = z.object({
+export const apparatusSelectSchema = z.object({
   id: z.number(),
   ...baseApparatus,
 });
 
-export const updateApparatusSchema = z.object({
+export const apparatusUpdateSchema = z.object({
   id: z.number(),
   ...baseApparatus,
 });
 
-export const upsertApparatusDtoSchema = z.object({
-  id: z.number().optional(),
+export const apparatusInsertSchema = z.object({
   ...baseApparatus,
 });
-
-// Type-safe utility to ensure schema matches Prisma expectations
-export type CreateApparatusInput = z.infer<typeof createApparatusSchema>;

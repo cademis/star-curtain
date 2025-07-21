@@ -90,3 +90,52 @@ This concurrently starts all services: trpc-server build watch, db build watch, 
 ## Package Manager
 
 Uses pnpm with workspace configuration. All commands should use pnpm, not npm or yarn.
+
+## trpc procedure naming
+
+Use the following procedure naming conventions
+
+- series example (where series is both singular and plural)
+  - `updateSeries` (just one)
+  - `updateManySeries` (one or more)
+  - `createSeries` (just one)
+  - `createManySeries` (one or more)
+  - `getSeries` (one)
+  - `getAllSeries` (all)
+  - `deleteSeries` (one)
+  - `deleteManySeries` (one or more)
+- posts example (where `post` is singular and `posts` is plural)
+  - `updatePost` (just one)
+  - `updateManyPosts` (one or more)
+  - `upsertPost` (create or update one)
+  - `upsertManyPosts` (create or update many)
+  - `createPost` (just one)
+  - `createManyPosts` (one or more)
+  - `getPost` (one)
+  - `getPostById` (one by ID - use when other identifiers exist)
+  - `getPostWithAuthor` (one with specific relations)
+  - `getPostWithRelations` (one with all or optional relations)
+  - `getAllPosts` (all)
+  - `getAllPostsWithAuthor` (all with specific relations)
+  - `getAllPostsWithRelations` (all with all or optional relations)
+  - `findPostsByAuthor` (filtered by specific field)
+  - `findPostsByTag` (filtered by specific field)
+  - `searchPosts` (text search or complex filters)
+  - `deletePost` (one)
+  - `deleteManyPosts` (one or more)
+
+## trpc input schemas
+
+The input schema should match the procedure name e.g.
+
+- createPost -> createPostSchema
+- createManyPosts -> createManyPostsSchema
+- upsertPost -> upsertPostSchema
+- findPostsByAuthor -> findPostsByAuthorSchema
+- searchPosts -> searchPostsSchema
+
+if only providing a single input (e.g. id), then the schema should be defined inside the procedure's input e.g.
+
+```
+getPost: publicProcedure.input(z.number()).query(...)
+```

@@ -1,9 +1,6 @@
-import { Box, SxProps, TextField, Theme } from "@mui/material";
-import { useForm, useWatch } from "react-hook-form";
-import * as z from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { Box, Button, SxProps, TextField, Theme, Typography } from "@mui/material";
+import { useWatch, UseFormRegister, Control, UseFormHandleSubmit } from "react-hook-form";
 import { calculateEstimatedOneRepMax } from "../../../utils";
-import { updateLogSchema } from "@repo/trpc-server/schemas/log.schema";
 
 const style: SxProps<Theme> = (theme) => ({
   position: "absolute",
@@ -20,39 +17,32 @@ const style: SxProps<Theme> = (theme) => ({
   gap: theme.spacing(1),
 });
 
-type UpdateLogSchema = z.infer<typeof updateLogSchema>;
-
-interface Props {
-  log: UpdateLogSchema | null;
-  onSubmit: (data: UpdateLogSchema) => void;
+interface LogFormProps {
+  title: string;
+  submitButtonText: string;
+  register: UseFormRegister<any>;
+  control: Control<any>;
+  handleSubmit: UseFormHandleSubmit<any>;
+  onSubmit: (data: any) => void;
 }
 
-const updateLogFormSchema = updateLogSchema.omit({ id: true });
-type UpdateLogFormSchema = z.infer<typeof updateLogFormSchema>;
-
-export function EditLogForm({ onSubmit, log }: Props) {
-  const { handleSubmit, register, control } = useForm({
-    mode: "onBlur",
-    resolver: zodResolver(updateLogFormSchema),
-    defaultValues: log || updateLogFormSchema.parse({}),
-  });
-
+export function LogForm({
+  title,
+  submitButtonText,
+  register,
+  control,
+  handleSubmit,
+  onSubmit,
+}: LogFormProps) {
   const [weight, reps] = useWatch({ control, name: ["weight", "reps"] });
 
   const e1rm = calculateEstimatedOneRepMax(reps, weight);
 
-  const handleValidSubmit = (data: UpdateLogFormSchema) => {
-    if (!log?.id) {
-      console.error("Log ID is missing, cannot submit form.");
-      return;
-    }
-    onSubmit({ ...data, id: log.id });
-  };
-
-  const onSubmitHandler = handleSubmit(handleValidSubmit);
-
   return (
-    <Box sx={style} component={"form"} onSubmit={onSubmitHandler}>
+    <Box sx={style} component={"form"} onSubmit={handleSubmit(onSubmit)}>
+      <Typography variant="h6" component="h2">
+        {title}
+      </Typography>
       <TextField
         label="Weight"
         type="number"
@@ -75,6 +65,9 @@ export function EditLogForm({ onSubmit, log }: Props) {
       />
       <TextField label="Notes" {...register("notes")} />
       <TextField label="e1rm" type="number" value={e1rm} disabled />
+      <Button type="submit" variant="contained">
+        {submitButtonText}
+      </Button>
     </Box>
   );
 }

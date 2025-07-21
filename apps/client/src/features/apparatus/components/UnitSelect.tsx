@@ -1,6 +1,6 @@
 import { MenuItem, Select, SelectChangeEvent } from "@mui/material";
 
-import { Unit, UnitType } from "../constants";
+import { Unit, UnitType } from "../../../constants";
 
 interface UnitSelectProps {
   unit: UnitType;

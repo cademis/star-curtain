@@ -1,5 +1,5 @@
 import { Modal } from "@mui/material";
-import { UpdateApparatus } from "./feature/apparatus/UpdateApparatus";
+import { UpdateApparatus } from "./UpdateApparatus";
 
 type Props = {
   selectedRow: number;

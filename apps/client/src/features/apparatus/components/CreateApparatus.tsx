@@ -1,7 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTRPC } from "../../../utils/trpc";
 import { EditApparatusForm } from "./EditApparatusForm";
-import { defaultValues } from "../../../constants/defaultValues";
 import { z } from "zod";
 import { createApparatusSchema } from "@repo/db/schema/apparatus";
 
@@ -30,7 +29,5 @@ export function CreateApparatus({ setOpen }: Props) {
     createApparatus(data);
   };
 
-  return (
-    <EditApparatusForm initialValues={defaultValues} onSubmit={handleSubmit} />
-  );
+  return <EditApparatusForm onSubmit={handleSubmit} />;
 }

@@ -1,9 +1,8 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTRPC } from "../../../utils/trpc";
-import { EditLogForm } from "./EditLogForm";
 import { z } from "zod";
-import { createLogSchema } from "@repo/db/schema/log.schema";
-import { useState } from "react";
+import { createLogSchema } from "@repo/trpc-server/schemas/log.schema";
+import { CreateLogForm } from "./CreateLogForm";
 
 type Props = {
   setOpen: (value: boolean) => void;
@@ -17,9 +16,8 @@ export function CreateLog({ setOpen }: Props) {
     trpc.log.createLog.mutationOptions({
       onSuccess: () => {
         queryClient.invalidateQueries({
-          queryKey: trpc.log.getLogsWithApparatus.queryKey(),
+          queryKey: trpc.log.getLogs.queryKey(),
         });
-        console.log("success!!");
         setOpen(false);
       },
       onError: (err) => console.log("error", err),
@@ -27,8 +25,9 @@ export function CreateLog({ setOpen }: Props) {
   );
 
   const handleSubmit = async (data: z.infer<typeof createLogSchema>) => {
-    const result = createLog(data);
+    createLog(data);
   };
 
-  return <EditLogForm onSubmit={handleSubmit} />;
+  // return <EditLogForm  onSubmit={handleSubmit} />;
+  return <CreateLogForm onSubmit={handleSubmit} />;
 }

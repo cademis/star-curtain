@@ -34,7 +34,7 @@ export const apparatusRouter = router({
       });
       return result.id;
     }),
-  getApparatusById: publicProcedure
+  getApparatus: publicProcedure
     .input(z.number().nullable())
     .query(async ({ ctx, input }) => {
       if (input === null) {
@@ -53,7 +53,7 @@ export const apparatusRouter = router({
 
       return result;
     }),
-  getApparatuses: publicProcedure.query(async ({ ctx }) => {
+  getAllApparatus: publicProcedure.query(async ({ ctx }) => {
     return await ctx.db.apparatus.findMany();
   }),
   updateApparatus: publicProcedure

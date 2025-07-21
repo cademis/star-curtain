@@ -8,20 +8,34 @@ import {
 import { TRPCError } from "@trpc/server";
 
 export const logRouter = router({
-  getLogById: publicProcedure
-    .input(z.number())
-    .query(async ({ ctx, input }) => {
-      const result = await ctx.db.log.findUnique({
-        where: {
-          id: input,
-        },
-      });
-      return result;
-    }),
-  getLogs: publicProcedure.query(async ({ ctx }) => {
+  getLog: publicProcedure.input(z.number()).query(async ({ ctx, input }) => {
+    const result = await ctx.db.log.findUnique({
+      where: {
+        id: input,
+      },
+    });
+    return result;
+  }),
+  // getLog: publicProcedure.input(z.number()).query(async ({ ctx, input }) => {
+  //   const result = await ctx.db.log.findUnique({
+  //     where: { id: input },
+  //     select: {
+  //       id: true,
+  //       weight: true,
+  //       sets: true,
+  //       reps: true,
+  //       rir: true,
+  //       notes: true,
+  //       apparatus_id: true,
+  //       session_id: true,
+  //     },
+  //   });
+  //   return result;
+  // }),
+  getAllLogs: publicProcedure.query(async ({ ctx }) => {
     return await ctx.db.log.findMany({});
   }),
-  getLogsWithApparatus: publicProcedure.query(async ({ ctx }) => {
+  getAllLogsWithApparatus: publicProcedure.query(async ({ ctx }) => {
     const result = await ctx.db.log.findMany({
       include: {
         apparatus: true,
@@ -33,22 +47,6 @@ export const logRouter = router({
       apparatus: undefined,
     }));
     return flattened;
-  }),
-  getLog: publicProcedure.input(z.number()).query(async ({ ctx, input }) => {
-    const result = await ctx.db.log.findUnique({
-      where: { id: input },
-      select: {
-        id: true,
-        weight: true,
-        sets: true,
-        reps: true,
-        rir: true,
-        notes: true,
-        apparatus_id: true,
-        session_id: true,
-      },
-    });
-    return result;
   }),
   createLog: publicProcedure
     .input(createLogSchema)

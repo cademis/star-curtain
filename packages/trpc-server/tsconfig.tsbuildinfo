@@ -1,1 +1,1 @@
-{"root":["./src/index.ts","./src/trpc.ts","./src/routers/activity.router.ts","./src/routers/apparatus.router.ts","./src/routers/log.router.ts","./src/routers/root.ts","./src/routers/user.router.ts","./src/schemas/log.schema.ts"],"errors":true,"version":"5.8.2"}
+{"root":["./src/index.ts","./src/trpc.ts","./src/routers/activity.router.ts","./src/routers/apparatus.router.ts","./src/routers/log.router.ts","./src/routers/root.ts","./src/routers/user.router.ts","./src/schemas/apparatus.schema.ts","./src/schemas/log.schema.ts"],"version":"5.8.2"}

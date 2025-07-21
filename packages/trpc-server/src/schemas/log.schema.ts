@@ -14,13 +14,13 @@
 import { z } from "zod";
 
 const baseLog = {
-  apparatus_id: z.number().nullable(),
-  session_id: z.number().nullable(),
-  weight: z.number().default(0),
-  sets: z.number().default(1),
-  reps: z.number().default(1),
-  rir: z.number().default(0),
-  notes: z.string().default(""),
+  apparatus_id: z.coerce.number().nullable(),
+  session_id: z.coerce.number().nullable(),
+  weight: z.coerce.number(),
+  sets: z.coerce.number().min(1),
+  reps: z.coerce.number().min(1),
+  rir: z.coerce.number().min(0),
+  notes: z.string(),
 } as const;
 
 export const createLogSchema = z.object({
@@ -41,8 +41,3 @@ export const upsertLogSchema = z.object({
   id: z.number().optional(),
   ...baseLog,
 });
-
-// Type-safe utility to ensure schema matches Prisma expectations
-export type CreateLogInput = z.infer<typeof createLogSchema>;
-export type UpdateLogInput = z.infer<typeof updateLogSchema>;
-export type SelectLogInput = z.infer<typeof selectLogSchema>;

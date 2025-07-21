@@ -1,7 +1,7 @@
 import { Box, Tab, Tabs } from "@mui/material";
-import ApparatusTable from "../feature/apparatus/ApparatusTable";
+import ApparatusTable from "../../features/apparatus/components/ApparatusTable";
 import { SyntheticEvent, useState } from "react";
-import LogsTable from "../feature/log/LogsTable";
+import LogsTable from "../../features/logs/components/LogsTable";
 
 export default function Dashboard() {
   const [value, setValue] = useState(0);

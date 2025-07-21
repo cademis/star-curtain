@@ -10,8 +10,8 @@ import {
 } from "@mui/x-data-grid";
 import { useState } from "react";
 import { Button, Modal } from "@mui/material";
-import { MovementFilter } from "../../MovementFilter";
-import { EditModal } from "../../EditModal";
+import { MovementFilter } from "../../apparatus/components/MovementFilter";
+import { EditModal } from "../../apparatus/components/EditModal";
 import { UpdateLog } from "./UpdateLog";
 import { CreateLog } from "./CreateLog";
 
@@ -121,18 +121,13 @@ export default function LogsTable() {
     <>
       <Modal
         open={isCreateModalOpen}
-        onClose={() => setIsCreateModalOpen(false)}
+        onClose={() => {
+          setIsCreateModalOpen(false);
+          setIsEditModalOpen(false);
+        }}
       >
-        {/* {selectedRow ? (
-          <UpdateApparatus
-            setOpen={setIsCreateModalOpen}
-            selectedRow={selectedRow}
-          />
-        ) : (
-          <CreateApparatus setOpen={setIsCreateModalOpen} />
-        )} */}
         {selectedRow ? (
-          <UpdateLog setOpen={setIsCreateModalOpen} id={selectedRow} />
+          <UpdateLog setOpen={setIsEditModalOpen} id={selectedRow} />
         ) : (
           <CreateLog setOpen={setIsCreateModalOpen} />
         )}

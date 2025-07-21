@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { EditForm } from "./feature/apparatus/EditApparatusForm";
-import { useTRPC } from "../utils/trpc";
+import { EditForm } from "./EditApparatusForm";
+import { useTRPC } from "../../../utils/trpc";
 
 type Props = {
   apparatusId: number;

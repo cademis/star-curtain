@@ -13,11 +13,10 @@ import { bodyParts, movementTypes } from "@repo/db/schema/apparatus";
 import { UpdateApparatus } from "./UpdateApparatus";
 import { useState } from "react";
 import { Button, Modal } from "@mui/material";
-import { MovementFilter } from "../../MovementFilter";
+import { MovementFilter } from "./MovementFilter";
 import { CreateApparatus } from "./CreateApparatus";
-import { calculateEstimatedWeight } from "../../../utils";
 import { TRPCClientError } from "@trpc/client";
-import { EditModal } from "../../EditModal";
+import { EditModal } from "./EditModal";
 
 export default function ApparatusTable() {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
@@ -94,12 +93,6 @@ export default function ApparatusTable() {
       headerName: "Increment",
       width: 130,
       type: "number",
-    },
-    {
-      field: "weight",
-      valueGetter: (_value, row) => {
-        return calculateEstimatedWeight(row.reps, row.oneRepMax);
-      },
     },
     {
       field: "unit",
