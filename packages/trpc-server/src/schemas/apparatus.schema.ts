@@ -49,16 +49,11 @@ const baseApparatus = {
   starting_weight: z.coerce.number().min(0),
 } as const;
 
-export const apparatusSelectSchema = z.object({
+export const updateApparatusSchema = z.object({
   id: z.number(),
   ...baseApparatus,
 });
 
-export const apparatusUpdateSchema = z.object({
-  id: z.number(),
-  ...baseApparatus,
-});
-
-export const apparatusInsertSchema = z.object({
+export const createApparatusSchema = z.object({
   ...baseApparatus,
 });

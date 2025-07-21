@@ -81,7 +81,7 @@ export const logRouter = router({
         },
       });
     }),
-  deleteLogById: publicProcedure
+  deleteLog: publicProcedure
     .input(z.number())
     .mutation(async ({ ctx, input }) => {
       try {

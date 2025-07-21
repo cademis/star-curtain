@@ -3,8 +3,7 @@ import { publicProcedure, router } from "../trpc.js";
 import {
   createApparatusSchema,
   updateApparatusSchema,
-  upsertApparatusDtoSchema,
-} from "@repo/db/schema/apparatus";
+} from "../schemas/apparatus.schema.js";
 
 export const apparatusRouter = router({
   createApparatus: publicProcedure
@@ -57,7 +56,7 @@ export const apparatusRouter = router({
     return await ctx.db.apparatus.findMany();
   }),
   updateApparatus: publicProcedure
-    .input(upsertApparatusDtoSchema)
+    .input(updateApparatusSchema)
     .mutation(async ({ input, ctx }) => {
       const { id, ...data } = input;
       const result = await ctx.db.apparatus.update({
@@ -67,7 +66,7 @@ export const apparatusRouter = router({
       return result;
     }),
 
-  deleteApparatusById: publicProcedure
+  deleteApparatus: publicProcedure
     .input(z.number())
     .mutation(async ({ ctx, input }) => {
       await ctx.db.apparatus.delete({
